@@ -1,14 +1,22 @@
-#!/usr/bin/env node
+'use strict';
+var util = require('util');
+var yeoman = require('yeoman-generator');
 
-module.exports = function() {
+var HandlebarsGenerator = module.exports = function HandlebarsGenerator(args, options, config) {
+  // By calling `NamedBase` here, we get the argument to the subgenerator call
+  // as `this.name`.
+  yeoman.generators.Base.apply(this, arguments);
+};
+
+util.inherits(HandlebarsGenerator, yeoman.generators.NamedBase);
+
+HandlebarsGenerator.prototype.compileFiles = function files() {
+
    var fs         = require('fs'),
    Handlebars      = require('handlebars'),
    content = null, compiler = null, compileFile = null;
 
    compiler = function (content) {
-         /**
-          * Handlebar doesn't support precompile on nodejs yet
-          */
          return 'Y.Handlebars.template(' + Handlebars.precompile(content) + ')';
    };
 
@@ -22,7 +30,7 @@ module.exports = function() {
       }
 
       var templateName = matches[1];
- 
+   
       console.log('compiling '+filename+' with the handlebars');
 
       fs.readFile('./templates/'+filename, 'utf8', function (err, data) {
@@ -30,7 +38,7 @@ module.exports = function() {
             throw err;
          }
 
-         content = "Y.namespace('templates')['" + templateName + "'] = " + compilers[type](data) + ";\n";
+         content = "Y.namespace('templates')['" + templateName + "'] = " + compiler(data) + ";\n";
          fs.writeFile('templates/' + templateName + '.js', content, 'utf8');
       });
    };
@@ -41,5 +49,5 @@ module.exports = function() {
       }
       files.forEach(compileFile);
    });
-};
 
+};

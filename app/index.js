@@ -20,7 +20,7 @@ var Yui3Generator = module.exports = function Yui3Generator(args, options, confi
 
   if (args.length < 1) {
     this.log.write('Usage : yo yui3 <project_name> [--!config]');
-    return;
+    process.exit(1);
   }
 
 };

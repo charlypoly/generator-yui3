@@ -26,4 +26,4 @@ var <%= _.capitalize(name) %> = new Y.Base.create("<%= name %>", Y.Base, [], {
    // ATTRS : {}
 });
 
-mobile.<%= _.capitalize(name) %> = <%= _.capitalize(name) %>;
+Y.<%= _.capitalize(name) %> = <%= _.capitalize(name) %>;

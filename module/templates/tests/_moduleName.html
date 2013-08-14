@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title><%= name %> tests</title>
+
+
+    <script src="http://yui.yahooapis.com/3.7.3/build/yui/yui.js"></script>
+
+    <script src="../../../../build/mobile3-loader/mobile3-loader.js"></script>
+
+
+
+</head>
+<body class="yui3-skin-sam">
+<h1><%= name %> Tests</h1>
+<div id="testLogger"></div>
+<script>
+
+YUI({
+    coverage: ['<%= name %>'],
+    filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw',
+    modules: {
+        '<%= name %>-test': {
+            fullpath: './assets/<%= name %>-test.js',
+            requires: ["test","<%= name %>"]
+        }
+    }
+}).use("test", "test-console", "<%= name %>", "<%= name %>-test", function(Y) {
+
+    window.Y = Y; // keep this for the yui selenium driver
+
+   //create the console
+   (new Y.Test.Console({
+      newestOnTop : false,
+      filters: {
+         pass: true,
+         fail: true
+      }
+   })).render('#testLogger');
+
+    Y.Test.Runner.run();
+
+});
+</script>
+</body>
+</html>

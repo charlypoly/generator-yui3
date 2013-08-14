@@ -101,7 +101,7 @@ yo yui3:handlebars
 **clean module files after shift**
 
 ```
-yo yui3:post_cleaner
+yo yui3:post-cleaner
 ```
 
 
@@ -123,5 +123,5 @@ yo yui3 <project_name> [ --no-config ]
 
 
 
-Add a "--gitignore" option ``` yo yui3 ``` to put ```.yui3-project.json``` file in ```.gitignore```
+Add a ```--gitignore`` option ``` yo yui3 ``` to put ```.yui3-project.json``` file in ```.gitignore```
 

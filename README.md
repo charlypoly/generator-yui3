@@ -71,6 +71,21 @@ Scaffold a YUI3 module structure with Y.Base and by default, the following folde
 - assets (contains images, css)
 
 
+** Add template to a existing module**
+
+
+```
+yo yui3:addtemplate <template_name>[, <template_name>,...]
+```
+
+** Add lang to a existing module**
+
+
+```
+yo yui3:addlang <lang>[, <lang>,...]
+```
+
+
 internals tasks for Shifter
 ==
  

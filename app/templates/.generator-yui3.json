@@ -1,7 +1,10 @@
 {
-   "project" : "",
-   "module" : {
-      "base" : ["i18n", "docs", "assets", "tests"],
-      "widget" : ["i18n", "docs", "assets", "templates", "tests"],
+   "project" : "<%= projectName %>",
+   "modules" : {
+      "base" : {
+         "create" : [],
+         "i18n" : ["en"]
+      },
+      "widget" : ["i18n", "docs", "assets", "templates", "tests"]
    }
 }

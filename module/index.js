@@ -9,6 +9,11 @@ var ModuleGenerator = module.exports = function ModuleGenerator(args, options, c
     // as `this.name`.
     yeoman.generators.NamedBase.apply(this, arguments);
 
+    this.configurators = {
+        'base'      : this._configureBase,
+        'widget'    : this._configureWidget
+    };
+
 };
 
 util.inherits(ModuleGenerator, yeoman.generators.NamedBase);
@@ -79,6 +84,7 @@ ModuleGenerator.prototype.loadConfigurationFile = function loadConfigurationFile
         if (fs.existsSync(path.resolve('../.generator-yui3.json'))) {
             var conf = fs.readFileSync(path.resolve('../.generator-yui3.json'));
             conf = JSON.parse(conf);
+            console.log(conf);
             conf = conf.modules[this.moduleType];
 
             //config 
@@ -97,6 +103,7 @@ ModuleGenerator.prototype.loadConfigurationFile = function loadConfigurationFile
             cb();
         }
     } catch(err) {
+        console.dir(err);
         this.log.error('Fails to load project configuration file : \n');
         this.log.error(err + '\n');
         this.prompt({
@@ -181,20 +188,12 @@ ModuleGenerator.prototype.configure = function configure() {
 ModuleGenerator.prototype.createStructure = function createStructure() {
     this.mkdir(this.name);
     this.mkdir(this.name + "/js");
-    this.template("_moduleName.js", this.name + "/js/" + this.name + ".js");
+
     this.write(this.name +"/build.json", this._generateBuild());
+
+    this.configurators[this.moduleType].call(this); //configure with proper module type
 };
 
-/**
- * @method meta
- *
- *  Handle module meta file
- *
- */
-ModuleGenerator.prototype.meta = function meta() {
-    this.mkdir(this.name + "/meta");
-    this.write(this.name +"/meta/" + this.name + ".json", this._generateMeta());
-};
 
 /**
  * @method tests
@@ -207,8 +206,14 @@ ModuleGenerator.prototype.tests = function tests() {
         this.mkdir(this.name + "/tests");
         this.mkdir(this.name + "/tests/unit");
         this.mkdir(this.name + "/tests/unit/assets");
-        this.template("tests/_moduleName-test.js",this.name +  "/tests/unit/assets/" + this.name + "-test.js");
-        this.template("tests/_moduleName.html",this.name +  "/tests/unit/" + this.name + ".html");
+        this.template(
+            "tests/_moduleName-test.js",
+            this.name +  "/tests/unit/assets/" + this.name + "-test.js"
+        );
+        this.template(
+            "tests/_moduleName.html",
+            this.name +  "/tests/unit/" + this.name + ".html"
+        );
 
         var projectName = this._getProjectName();
 
@@ -271,7 +276,9 @@ ModuleGenerator.prototype.i18n = function i18n() {
  */
 ModuleGenerator.prototype._getProjectName = function _getProjectName() {
     try {
-        var pkg = JSON.parse(this.readFileAsString(path.join(process.cwd(), '../package.json')));
+        var pkg = JSON.parse(
+            this.readFileAsString(path.join(process.cwd(), '../package.json'))
+        );
         return pkg.name;
     } catch (err) {
         this.log.error('Fails to fetch project name with package.json file \n '+err);
@@ -294,8 +301,10 @@ ModuleGenerator.prototype._srcExists = function _srcExists() {
  * @method this._generateMeta
  * @private
  *
- *  Return the module meta/<moduleName>.json file content with proper configuration
+ *  Return the module meta/<moduleName>.json object with proper configuration
  *
+ *
+ * @return object
  */
 ModuleGenerator.prototype._generateMeta = function() {
     var meta = JSON.parse(this.engine(this.read('meta/_meta.json'), this));
@@ -322,7 +331,7 @@ ModuleGenerator.prototype._generateMeta = function() {
         }
     }
 
-    return JSON.stringify(meta, "\t");
+    return meta;
 
 };
 
@@ -331,6 +340,8 @@ ModuleGenerator.prototype._generateMeta = function() {
  * @private
  *
  * Return the module build.json file content with proper configuration
+ *
+ * @return string/JSON
  *
  */
 ModuleGenerator.prototype._generateBuild = function() {
@@ -359,7 +370,7 @@ ModuleGenerator.prototype._generateBuild = function() {
         }
     }
 
-    return JSON.stringify(build, "\t");
+    return JSON.stringify(build);
 
 };
 
@@ -381,4 +392,38 @@ ModuleGenerator.prototype._setDefaultConfiguration = function _setDefaultConfigu
         },
         i18n : ['en']
     };
+}
+
+// ## Private module configuration by type
+
+/**
+ * @method this._setDefaultConfiguration
+ * @private
+ *
+ *  Return the default configuration
+ *
+ */
+ModuleGenerator.prototype._configureBase = function _configureBase() {
+    //add base deps in meta file
+    this.template("js/base/_moduleName.js", this.name + "/js/" + this.name + ".js");
+    var meta = this._generateMeta();
+
+    if (!meta[this.name].requires || !meta[this.name].requires.length) {
+        meta[this.name].requires = ['base'];
+    } else if (!!!~meta[this.name].requires.indexOf('base')) { //ensure "base" not in deps
+        meta[this.name].requires.push('base');
+    }
+
+    this.write(this.name +"/meta/"+this.name+".json", JSON.stringify(meta));
+}
+
+/**
+ * @method this._setDefaultConfiguration
+ * @private
+ *
+ *  Return the default configuration
+ *
+ */
+ModuleGenerator.prototype._configureWidget = function _configureWidget() {
+    //add widget deps in meta file
 }

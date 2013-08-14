@@ -5,6 +5,9 @@
          "create" : [],
          "i18n" : ["en"]
       },
-      "widget" : ["i18n", "docs", "assets", "templates", "tests"]
+      "widget" : {
+         "create" : ["templates"],
+         "i18n" : ["en"]
+      }
    }
 }

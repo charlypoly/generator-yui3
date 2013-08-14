@@ -1,0 +1,10 @@
+{
+   "name": "<%= name %>",
+   "builds": {
+      "<%= name %>": {
+         "jsfiles": [
+            "<%= name %>.js"
+         ]
+      }
+   }
+}

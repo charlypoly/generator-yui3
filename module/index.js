@@ -1,9 +1,8 @@
 'use strict';
-var util = require('util'),
-yeoman = require('yeoman-generator'),
-generator = require('./module-generator.js'),
+var util = require('util');
+var yeoman = require('yeoman-generator');
 
-ModuleGenerator = module.exports = function ModuleGenerator(args, options, config) {
+var ModuleGenerator = module.exports = function ModuleGenerator(args, options, config) {
   // By calling `NamedBase` here, we get the argument to the subgenerator call
   // as `this.name`.
   yeoman.generators.NamedBase.apply(this, arguments);
@@ -13,6 +12,16 @@ ModuleGenerator = module.exports = function ModuleGenerator(args, options, confi
 
 util.inherits(ModuleGenerator, yeoman.generators.NamedBase);
 
-ModuleGenerator.prototype.start = function start() {
-  generator.create.apply(this, name, type, options);
+/**
+ * minimum structure needed to shift the module
+ * @method createStructure
+ *
+ */
+ ModuleGenerator.prototype.createStructure = function createStructure() {
+
+    this.mkdir(this.name);
+    this.mkdir(this.name+"/js");
+    this.template("_moduleName.js", this.name+"/js/"+ this.name +".js");
+    this.template("_build.json", this.name+"/build.json");
+
 };

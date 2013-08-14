@@ -2,6 +2,8 @@
 var util = require('util');
 var path = require('path');
 var yeoman = require('yeoman-generator');
+var fs = require('fs');
+var path = require('path');
 
 
 var Yui3Generator = module.exports = function Yui3Generator(args, options, config) {
@@ -22,7 +24,12 @@ util.inherits(Yui3Generator, yeoman.generators.Base);
 
 Yui3Generator.prototype.create = function create() {
 
-     var config_file = this._.isUndefined(this.options['!config']) ?  true : config_file;
+     var config_file = this._.isUndefined(this.options['no-config']) ?  true : !!this.options['no-config'],
+     gitignore = this._.isUndefined(this.options['gitignore']) ?  false : !!this.options['gitignore'];
+
+     if (gitignore && config_file) {
+      this._appendToGitignore();
+     }
 
      this.projectName = this._.slugify(this.args[0]);
 
@@ -67,3 +74,21 @@ Yui3Generator.prototype.create = function create() {
      this.copy('project/tests/index.html', this.projectName+'/tests/index.html');
 
 };
+
+
+Yui3Generator.prototype._appendToGitignore = function() {
+  if (fs.existsSync(path.resolve('./.gitignore'))) {
+    var gitignore = fs.readFileSync(path.resolve('./.gitignore')),
+    entries = gitignore.split('\n');
+
+    if (!!!~entries.indexOf('.generator-yui3.json')) {
+      entries.push('.generator-yui3.json');
+    }
+
+    fs.writeFileSync('.gitignore', entries.join('\n'));
+    this.log.info('.gitignore updated !');
+  } else {
+    this.log.error('no .gitignore file found..');
+  }
+
+}

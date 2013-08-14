@@ -356,11 +356,11 @@ ModuleGenerator.prototype._generateBuild = function() {
             build.exec.push('yo yui3:handlebars');
         }
 
-        //post clean
+        //post cleaner
         if (!build.postexec || !build.postexec.length) {
-            build.postexec = ['yo yui3:post_clean'];
-        } else if (!!~build.execs.indexOf('yo yui3:post-clean')) { 
-            build.postexec.push('yo yui3:post-clean');
+            build.postexec = ['yo yui3:post-cleaner'];
+        } else if (!!~build.execs.indexOf('yo yui3:post-cleaner')) { 
+            build.postexec.push('yo yui3:post-cleaner');
         }
 
         try {

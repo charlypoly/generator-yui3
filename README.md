@@ -1,3 +1,6 @@
+(NOT STABLE YET)
+
+
 A Yeoman generator for YUI3 application using Shifter
 ==============
 
@@ -100,3 +103,25 @@ yo yui3:handlebars
 ```
 yo yui3:post_cleaner
 ```
+
+
+
+
+TODO 
+====
+
+Migrate 
+```
+yo yui3 <project_name> [ --!config ]
+```
+
+to 
+
+```
+yo yui3 <project_name> [ --no-config ]
+```
+
+
+
+Add a "--gitignore" option ``` yo yui3 ``` to put ```.yui3-project.json``` file in ```.gitignore```
+

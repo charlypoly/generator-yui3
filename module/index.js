@@ -54,12 +54,16 @@ ModuleGenerator.prototype.loadConfigurationFile = function loadConfigurationFile
             conf = JSON.parse(conf);
             conf = conf.modules[this.moduleType];
 
-            //config
+            //config 
             this._.each(this.configuration.create, this._.bind(function(value, index, configuration) {
                 if (!!~conf.create.indexOf(index)) {
                     this.configuration.create[index] = true;
                 }
             }, this));
+
+            if (conf.i18n && conf.i18n.length) {
+                this.configuration.i18n = conf.i18n;
+            }
 
             cb();
         } else {
@@ -93,8 +97,6 @@ ModuleGenerator.prototype.loadConfigurationFile = function loadConfigurationFile
 
 
 ModuleGenerator.prototype.configure = function configure() {
-
-    console.log(this.configuration);
 
     if (!!this.options['assets']) {
         this.configuration.create.assets = true;
@@ -203,6 +205,15 @@ ModuleGenerator.prototype.assets = function assets() {
     if (this.configuration.create.assets) {
         this.mkdir(this.name + "/assets/");
         // this.write(this.name + "assets/"+this.name+".handlebars.html", "");
+    }
+};
+
+ModuleGenerator.prototype.i18n = function i18n() {
+    if (this.configuration.create.i18n) {
+        this.mkdir(this.name + "/lang/");
+        this._.each(this.configuration.i18n, this._.bind(function(lang) {
+            this.write(this.name + "/lang/"+lang+".js" , "{}");
+        }, this));
     }
 };
 

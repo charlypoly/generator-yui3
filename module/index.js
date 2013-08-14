@@ -93,6 +93,21 @@ ModuleGenerator.prototype.assets = function assets() {
     }
 };
 
+ModuleGenerator.prototype.tests = function tests() {
+    if (this.configuration.tests) {
+        this.directory("tests", this.name + "/tests");
+
+        this.copy(
+           'tests/_moduleName-test.js', 
+           this.name + "/tests/"+this.name+'-test.js'
+         );
+        this.copy(
+           'tests/_moduleName.html', 
+           this.name + "/tests/"+this.name+'.html'
+         );
+    }
+};
+
 // private
 // -------------------------------------------------------------------------------------------------
 /**

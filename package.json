@@ -7,11 +7,18 @@
   ],
   "homepage": "https://github.com/wittydeveloper/generator-yui3",
   "bugs": "https://github.com/wittydeveloper/generator-yui3/issues",
-  "author": {
-    "name": "Charly Poly",
-    "email": "cpoly55@gmail.com",
-    "url": "https://github.com/wittydeveloper"
-  },
+  "contributors": [
+    {
+      "name": "Charly Poly",
+      "email": "cpoly55@gmail.com",
+      "url": "https://github.com/wittydeveloper"
+    },
+    {
+      "name": "BenNG",
+      "email": "",
+      "url": "https://github.com/benng"
+    }
+  ],
   "main": "app/index.js",
   "repository": {
     "type": "git",

@@ -1,5 +1,8 @@
-YUI3-generator
+A Yeoman generator for YUI3 application using Shifter
 ==============
+
+![yeoman](http://128bitstudios.com/images/logo/yeoman.png)
+![yui](http://ebmedia.eventbrite.com/s3-s3/eventlogos/2254509/828699663-2.jpg)
 
 
 **Create project**

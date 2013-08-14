@@ -161,11 +161,11 @@ ModuleGenerator.prototype._generateBuild = function() {
         }
 
         //post clean
-        if (!build.postexec || !build.postexec.length) {
-            build.postexec = ['yo yui3:post_clean'];
-        } else if (!!~build.execs.indexOf('yo yui3:post_clean')) { 
-            build.postexec.push('yo yui3:post_clean');
-        }
+        // if (!build.postexec || !build.postexec.length) {
+        //     build.postexec = ['yo yui3:post_clean'];
+        // } else if (!!~build.execs.indexOf('yo yui3:post_clean')) { 
+        //     build.postexec.push('yo yui3:post_clean');
+        // }
 
         try {
             build.builds[this.name].jsfiles.unshift('../templates/'+this.name+'.js')

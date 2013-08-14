@@ -244,10 +244,10 @@ ModuleGenerator.prototype._srcExists = function _srcExists() {
 ModuleGenerator.prototype._generateMeta = function() {
     var meta = JSON.parse(this.engine(this.read('meta/_meta.json'), this));
 
+    console.log(meta[this.name].requires);
+
     if (this.configuration.create.i18n) {
-        meta[this.name].lang = [
-            'en'
-        ];
+        meta[this.name].lang = this.configuration.i18n;
 
         if (!meta[this.name].requires || !meta[this.name].requires.length) {
             meta[this.name].requires = ['intl'];
@@ -286,11 +286,11 @@ ModuleGenerator.prototype._generateBuild = function() {
         }
 
         //post clean
-        // if (!build.postexec || !build.postexec.length) {
-        //     build.postexec = ['yo yui3:post_clean'];
-        // } else if (!!~build.execs.indexOf('yo yui3:post-clean')) { 
-        //     build.postexec.push('yo yui3:post-clean');
-        // }
+        if (!build.postexec || !build.postexec.length) {
+            build.postexec = ['yo yui3:post_clean'];
+        } else if (!!~build.execs.indexOf('yo yui3:post-clean')) { 
+            build.postexec.push('yo yui3:post-clean');
+        }
 
         try {
             build.builds[this.name].jsfiles.unshift('../templates/'+this.name+'.js')

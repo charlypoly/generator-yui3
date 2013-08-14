@@ -244,14 +244,12 @@ ModuleGenerator.prototype._srcExists = function _srcExists() {
 ModuleGenerator.prototype._generateMeta = function() {
     var meta = JSON.parse(this.engine(this.read('meta/_meta.json'), this));
 
-    console.log(meta[this.name].requires);
-
     if (this.configuration.create.i18n) {
         meta[this.name].lang = this.configuration.i18n;
 
         if (!meta[this.name].requires || !meta[this.name].requires.length) {
             meta[this.name].requires = ['intl'];
-        } else if (!!~meta[this.name].requires.indexOf('intl')) { //ensure "intl" not in deps
+        } else if (!!!~meta[this.name].requires.indexOf('intl')) { //ensure "intl" not in deps
             meta[this.name].requires.push('intl');
         }
     }
@@ -263,12 +261,12 @@ ModuleGenerator.prototype._generateMeta = function() {
     if (this.configuration.create.templates) {
         if (!meta[this.name].requires || !meta[this.name].requires.length) {
             meta[this.name].requires = ['handlebars-base'];
-        } else if (!!~meta[this.name].requires.indexOf('handlebars-base')) { //ensure "handlebars-base" not in deps
+        } else if (!!!~meta[this.name].requires.indexOf('handlebars-base')) { //ensure "handlebars-base" not in deps
             meta[this.name].requires.push('handlebars-base');
         }
     }
 
-    return JSON.stringify(meta);
+    return JSON.stringify(meta, "\t");
 
 };
 
@@ -299,7 +297,7 @@ ModuleGenerator.prototype._generateBuild = function() {
         }
     }
 
-    return JSON.stringify(build);
+    return JSON.stringify(build, "\t");
 
 };
 

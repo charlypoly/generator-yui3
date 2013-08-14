@@ -29,7 +29,8 @@
   },
   "dependencies": {
     "yeoman-generator": "~0.13.0",
-    "handlebars" : "1.0.12"
+    "handlebars" : "1.0.12",
+    "glob" : "3.2.6"
   },
   "devDependencies": {
     "mocha": "~1.12.0"

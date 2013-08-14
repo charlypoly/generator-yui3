@@ -83,5 +83,5 @@ yo yui3:handlebars
 **clean module files after shift**
 
 ```
-yo yui3:module-clean
+yo yui3:post_cleaner
 ```

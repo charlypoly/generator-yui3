@@ -36,6 +36,7 @@ Yui3Generator.prototype.create = function create() {
         this.copy('.generator-yui3.json', this.projectName+'/.generator-yui3.json');
      }
 
+     this.copy('project/package.json', this.projectName+'/package.json');
 
      // # src/ folder
 

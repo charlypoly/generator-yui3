@@ -87,3 +87,8 @@ ModuleGenerator.prototype._srcExists = function _srcExists() {
      var length = srcPathTab.length;
      return srcPathTab[length - 1] === "src";
 }
+
+
+ModuleGenerator.prototype._generateMeta = function() {
+    
+}

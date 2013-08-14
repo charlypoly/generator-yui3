@@ -63,17 +63,19 @@ ModuleGenerator.prototype.meta = function meta() {
  *
  */
 ModuleGenerator.prototype.tests = function tests() {
-    this.mkdir(this.name + "/tests");
-    this.mkdir(this.name + "/tests/unit");
-    this.mkdir(this.name + "/tests/unit/assets");
-    this.template("tests/_moduleName-test.js",this.name +  "/tests/unit/assets/" + this.name + "-test.js");
-    this.template("tests/_moduleName.html",this.name +  "/tests/unit/" + this.name + ".html");
+    if (this.configuration.tests) {
+        this.mkdir(this.name + "/tests");
+        this.mkdir(this.name + "/tests/unit");
+        this.mkdir(this.name + "/tests/unit/assets");
+        this.template("tests/_moduleName-test.js",this.name +  "/tests/unit/assets/" + this.name + "-test.js");
+        this.template("tests/_moduleName.html",this.name +  "/tests/unit/" + this.name + ".html");
 
-    var projectName = this._getProjectName();
+        var projectName = this._getProjectName();
 
-    if(!projectName){
-        this.log.error("Provide a package.json file to your project !!");
-        process.exit(1);
+        if(!projectName){
+            this.log.error("Provide a package.json file to your project !!");
+            process.exit(1);
+        }
     }
 
 };
@@ -93,20 +95,6 @@ ModuleGenerator.prototype.assets = function assets() {
     }
 };
 
-ModuleGenerator.prototype.tests = function tests() {
-    if (this.configuration.tests) {
-        this.directory("tests", this.name + "/tests");
-
-        this.copy(
-           'tests/_moduleName-test.js', 
-           this.name + "/tests/"+this.name+'-test.js'
-         );
-        this.copy(
-           'tests/_moduleName.html', 
-           this.name + "/tests/"+this.name+'.html'
-         );
-    }
-};
 
 // private
 // -------------------------------------------------------------------------------------------------

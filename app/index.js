@@ -78,7 +78,9 @@ Yui3Generator.prototype.create = function create() {
 
 Yui3Generator.prototype._appendToGitignore = function() {
   if (fs.existsSync(path.resolve('./.gitignore'))) {
-    var gitignore = fs.readFileSync(path.resolve('./.gitignore')),
+    var gitignore = fs.readFileSync(path.resolve('./.gitignore'), {
+      encoding : 'utf-8'
+    }),
     entries = gitignore.split('\n');
 
     if (!!!~entries.indexOf('.generator-yui3.json')) {

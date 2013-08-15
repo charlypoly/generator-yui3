@@ -16,6 +16,9 @@ yo yui3 <project_name> [ --no-config, --gitignore ]
 ```
 
 - ```--gitignore``` option will put ```.yui3-project.json``` into your ```.gitignore``` file
+- ```--no-config``` prevent the file ```.yui3-project.json``` to be created.
+
+(if ```--no-config``` is active, ```--gitignore``` will not trigger the change of .gitignore file)
 
 Scaffold the following YUI3 project structure : 
 
@@ -55,10 +58,6 @@ test/
 │     
 └── yuidoc.json
 ```
-
-
-If --!config argument passed, the file ```.yui3-project.json``` will not be created.
-
 
 
 **Create module**

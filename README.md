@@ -12,8 +12,10 @@ A Yeoman generator for YUI3 application using Shifter
 
 
 ```
-yo yui3 <project_name> [ --!config ]
+yo yui3 <project_name> [ --no-config, --gitignore ]
 ```
+
+- ```--gitignore``` option will put ```.yui3-project.json``` into your ```.gitignore``` file
 
 Scaffold the following YUI3 project structure : 
 
@@ -63,7 +65,7 @@ If --!config argument passed, the file ```.yui3-project.json``` will not be crea
 
 
 ```
-yo yui3:module <module_name> [ --!i18n, --!assets, --!docs, --!templates, --!tests  ]
+yo yui3:module <module_name> [ --no-i18n, --no-assets, --no-docs, --no-templates, --no-tests  ]
 ```
 
 Scaffold a YUI3 module structure with Y.Base and by default, the following folders : 
@@ -103,25 +105,3 @@ yo yui3:handlebars
 ```
 yo yui3:post-cleaner
 ```
-
-
-
-
-TODO 
-====
-
-Migrate 
-```
-yo yui3 <project_name> [ --!config ]
-```
-
-to 
-
-```
-yo yui3 <project_name> [ --no-config ]
-```
-
-
-
-Add a ```--gitignore``` option ``` yo yui3 ``` to put ```.yui3-project.json``` file in ```.gitignore```
-

@@ -20,7 +20,29 @@ yo yui3 <project_name> [ --no-config, --gitignore ]
 
 (if ```--no-config``` is active, ```--gitignore``` will not trigger the change of .gitignore file)
 
-Scaffold the following YUI3 project structure : 
+
+```.yui3-project.json```
+Allow you to overwrite default configuration
+
+```
+{
+   "project" : "projectName",
+   "modules" : {
+      "base" : {
+         "create" : [],
+         "i18n" : ["en"]
+      },
+      "widget" : {
+         "create" : ["templates"],
+         "i18n" : ["en"]
+      }
+   }
+}
+```
+
+
+
+This generator scaffold the following YUI3 project structure : 
 
 ```
 test/
@@ -75,14 +97,14 @@ Scaffold a YUI3 module structure with Y.Base and by default, the following folde
 - assets (contains images, css)
 
 
-** Add template to a existing module**
+**Add template to a existing module**
 
 
 ```
 yo yui3:addtemplate <template_name>[, <template_name>,...]
 ```
 
-** Add lang to a existing module**
+**Add lang to a existing module**
 
 
 ```

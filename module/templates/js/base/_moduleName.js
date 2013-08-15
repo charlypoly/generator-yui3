@@ -10,7 +10,7 @@
 * @constructor
 */
 
-var <%= _.capitalize(name) %> = new Y.Base.create("<%= name %>", Y.Base, [], {
+var <%= _.capitalize(_.camelize(name)) %> = new Y.Base.create("<%= name %>", Y.Base, [], {
    /**
     * @method initializer
     *
@@ -26,4 +26,4 @@ var <%= _.capitalize(name) %> = new Y.Base.create("<%= name %>", Y.Base, [], {
    // ATTRS : {}
 });
 
-Y.<%= _.capitalize(name) %> = <%= _.capitalize(name) %>;
+Y.<%= _.capitalize(_.camelize(name)) %> = <%= _.capitalize(_.camelize(name)) %>;

@@ -7,7 +7,7 @@ var yeoman = require('yeoman-generator');
 var Yui3Generator = module.exports = function Yui3Generator(args, options, config) {
   yeoman.generators.Base.apply(this, arguments);
 
-  //TODO : use 
+  //TODO : use
   //  - https://github.com/yeoman/generator/wiki/base#baseusage
   //  - https://github.com/yeoman/generator/wiki/base#basedefaultfor
 
@@ -54,7 +54,7 @@ Yui3Generator.prototype.create = function create() {
      this.mkdir(
         this.projectName+'/src/'+this.projectName+'-loader/js');
      this.copy(
-        'project/src/projectName-loader/js/projectName.js', 
+        'project/src/projectName-loader/js/projectName.js',
         this.projectName+'/src/'+this.projectName+'-loader/js/'+this.projectName+'.js'
       );
      this.copy(
@@ -67,3 +67,13 @@ Yui3Generator.prototype.create = function create() {
      this.copy('project/tests/index.html', this.projectName+'/tests/index.html');
 
 };
+
+/**
+ * @method tests
+ *
+ */
+ Yui3Generator.prototype.loader = function loader() {
+    this.mkdir(this.projectName + '/src/' + this.projectName + '-loader/tests');
+    this.mkdir(this.projectName + '/src/' + this.projectName + '-loader/scripts');
+    this.template("loader/tests/_common.js", this.projectName + '/src/' + this.projectName + '-loader/tests/' +"common.js" );
+ };

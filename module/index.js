@@ -19,9 +19,9 @@ ModuleGenerator.prototype.configure = function() {
     this.configuration.assets = !!(this.options['assets'] && !this.options['!assets']);
 
     this.configuration.i18n = !!(this.options['i18n'] && !this.options['!i18n']);
-    
+
     this.configuration.tests = !!(this.options['tests'] && !this.options['!tests']);
-    
+
     this.configuration.templates = !!(this.options['templates'] && !this.options['!templates']);
 
     console.log('configuration : ', this.configuration);
@@ -63,19 +63,25 @@ ModuleGenerator.prototype.meta = function meta() {
  *
  */
 ModuleGenerator.prototype.tests = function tests() {
+
+    var projectName = this.projectName = this._getProjectName();
+
     this.mkdir(this.name + "/tests");
     this.mkdir(this.name + "/tests/unit");
     this.mkdir(this.name + "/tests/unit/assets");
     this.template("tests/_moduleName-test.js",this.name +  "/tests/unit/assets/" + this.name + "-test.js");
     this.template("tests/_moduleName.html",this.name +  "/tests/unit/" + this.name + ".html");
 
-    var projectName = this._getProjectName();
 
     if(!projectName){
         this.log.error("Provide a package.json file to your project !!");
         process.exit(1);
+    } else {
+        this.projectName = projectName;
     }
 
+    this.template("tests/_moduleName-test.js", this.name + "/tests/unit/assets/" + this.name + "-test.js");
+    this.template("tests/_moduleName.html", this.name + "/tests/unit/" + this.name + ".html");
 };
 
 
@@ -156,14 +162,14 @@ ModuleGenerator.prototype._generateBuild = function() {
         //template compilation
         if (!build.exec || !build.exec.length) {
             build.exec = ['yo yui3:handlebars'];
-        } else if (!!~build.execs.indexOf('yo yui3:handlebars')) { 
+        } else if (!!~build.execs.indexOf('yo yui3:handlebars')) {
             build.exec.push('yo yui3:handlebars');
         }
 
         //post clean
         // if (!build.postexec || !build.postexec.length) {
         //     build.postexec = ['yo yui3:post_clean'];
-        // } else if (!!~build.execs.indexOf('yo yui3:post_clean')) { 
+        // } else if (!!~build.execs.indexOf('yo yui3:post_clean')) {
         //     build.postexec.push('yo yui3:post_clean');
         // }
 

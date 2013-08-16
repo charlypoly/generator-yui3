@@ -2,6 +2,7 @@
    "project" : "",
    "module" : {
       "base" : ["i18n", "docs", "assets", "tests"],
-      "widget" : ["i18n", "docs", "assets", "templates", "tests"],
-   }
+      "widget" : ["i18n", "docs", "assets", "templates", "tests"]
+   },
+   "interactions" : {}
 }

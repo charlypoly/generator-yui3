@@ -9,5 +9,6 @@
          "create" : ["templates"],
          "i18n" : ["en"]
       }
-   }
+   },
+   "interactions" : {}
 }

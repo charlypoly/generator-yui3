@@ -21,7 +21,7 @@ yo yui3 <project_name> [ --no-config, --gitignore ]
 (if ```--no-config``` is active, ```--gitignore``` will not trigger the change of .gitignore file)
 
 
-- .yui3-project.json
+**.yui3-project.json**
 
 Allow you to overwrite default configuration
 

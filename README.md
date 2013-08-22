@@ -92,7 +92,7 @@ yo yui3:module <module_name> [ --no-i18n, --no-assets, --no-docs, --no-templates
 
 Scaffold a YUI3 module structure with Y.Base and by default, the following folders : 
 
-- docs (contain doc files)
+- docs (contain dtreeoc files)
 - test (contain unit test files)
 - templates (contains handlebars files)
 - assets (contains images, css)
@@ -100,13 +100,13 @@ Scaffold a YUI3 module structure with Y.Base and by default, the following folde
 
 **Add template to a existing module**
 
-
 ```
 yo yui3:addtemplate <template_name>[, <template_name>,...]
 ```
 
 **Add lang to a existing module**
 
+Create the lang part of a YUI module. Without arguments the scaffolder creates all the lang setted in the .generator-yui3.json. With argument it only creates the structure for the lang given as a parameter.
 
 ```
 yo yui3:addlang <lang>[, <lang>,...]

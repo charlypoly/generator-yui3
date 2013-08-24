@@ -3,6 +3,7 @@ var util = require('util');
 var yeoman = require('yeoman-generator');
 var path = require("path");
 var fs = require("fs");
+var beautify = require('js-beautify').js_beautify;
 
 var AddtemplateGenerator = module.exports = function AddtemplateGenerator(args, options, config) {
     yeoman.generators.Base.apply(this, arguments);
@@ -62,12 +63,21 @@ AddtemplateGenerator.prototype.generator = function generator() {
     // update meta
     var metaFile = JSON.parse(this.readFileAsString(this.metaFilePath));
     this._pushOnce(metaFile[this.moduleName].requires, "handlebars");
-    this.write(this.metaFilePath, JSON.stringify(metaFile));
+    this.write(this.metaFilePath, beautify(JSON.stringify(metaFile), {
+        indent_size: 3
+    }));
+
 
     // update build
     var buildFile = JSON.parse(this.readFileAsString(this.buildFilePath));
     this._pushOnce(buildFile.builds[this.moduleName].jsfiles, "../templates/" + name + ".js", true);
-    this.write(this.buildFilePath, JSON.stringify(buildFile));
+    if (!buildFile.exec) {
+        buildFile.exec = [];
+    }
+    this._pushOnce(buildFile.exec, "yo yui3:handlebars");
+    this.write(this.buildFilePath, beautify(JSON.stringify(buildFile), {
+        indent_size: 3
+    }));
 
 }
 

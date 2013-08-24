@@ -1,53 +1,42 @@
 'use strict';
 var util = require('util');
 var yeoman = require('yeoman-generator');
+var fs = require("fs");
+var Handlebars = require('yui/handlebars').Handlebars;
+var path = require("path");
+
 
 var HandlebarsGenerator = module.exports = function HandlebarsGenerator(args, options, config) {
-  // By calling `NamedBase` here, we get the argument to the subgenerator call
-  // as `this.name`.
-  yeoman.generators.Base.apply(this, arguments);
+    yeoman.generators.Base.apply(this, arguments);
 };
 
-util.inherits(HandlebarsGenerator, yeoman.generators.NamedBase);
+util.inherits(HandlebarsGenerator, yeoman.generators.Base);
 
-HandlebarsGenerator.prototype.compileFiles = function files() {
+HandlebarsGenerator.prototype.setPaths = function setPaths() {
 
-   var fs         = require('fs'),
-   Handlebars      = require('handlebars'),
-   content = null, compiler = null, compileFile = null;
+    this.rootPath = process.cwd();
+    this.templatesPath = path.join(this.rootPath, "./templates");
+    this.jsPath = path.join(this.rootPath, "./js");
 
-   compiler = function (content) {
-         return 'Y.Handlebars.template(' + Handlebars.precompile(content) + ')';
-   };
+};
+
+HandlebarsGenerator.prototype.actions = function actions() {
+
+    var files = fs.readdirSync(this.templatesPath),
+        i, fileLength = files.length,
+        fileName, matches, templateFileRaw;
 
 
-   compileFile = function (filename) {
-      
-      var matches = filename.match(/^([^\.]*)\.handlebars.html$/);
+    for (i = 0; i < fileLength; i++) {
+        fileName = files[i];
+        matches = fileName.match(/^([^\.]*)\.handlebars.html$/);
 
-      if (matches === null) {
-         return;
-      }
+        if (matches) {
 
-      var templateName = matches[1];
-   
-      console.log('compiling '+filename+' with the handlebars');
-
-      fs.readFile('./templates/'+filename, 'utf8', function (err, data) {
-         if (err) {
-            throw err;
-         }
-
-         content = "Y.namespace('templates')['" + templateName + "'] = " + compiler(data) + ";\n";
-         fs.writeFile('templates/' + templateName + '.js', content, 'utf8');
-      });
-   };
-
-   fs.readdir('./templates', function (err, files) {
-      if (err) {
-         throw err;
-      }
-      files.forEach(compileFile);
-   });
+            templateFileRaw = this.readFileAsString(path.join(this.templatesPath, fileName));
+            var content = "Y.namespace('templates')['" + matches[1] + "'] = " + Handlebars.precompile(templateFileRaw) + ";\n"
+            this.write(path.join(this.templatesPath, matches[1] + ".js"), content);
+        }
+    }
 
 };

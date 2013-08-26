@@ -32,9 +32,8 @@ HandlebarsGenerator.prototype.actions = function actions() {
         matches = fileName.match(/^([^\.]*)\.handlebars.html$/);
 
         if (matches) {
-
             templateFileRaw = this.readFileAsString(path.join(this.templatesPath, fileName));
-            var content = "Y.namespace('templates')['" + matches[1] + "'] = " + Handlebars.precompile(templateFileRaw) + ";\n"
+            var content = "Y.namespace('templates')['" + matches[1] + "'] = Y.Handlebars.template(" + Handlebars.precompile(templateFileRaw) + ");\n"
             this.write(path.join(this.templatesPath, matches[1] + ".js"), content);
         }
     }

@@ -10,5 +10,6 @@
          "i18n" : ["en"]
       }
    },
-   "interactions" : {}
+   "interactions" : {},
+   "lang" : ["fr", "en", "es", "de"]
 }

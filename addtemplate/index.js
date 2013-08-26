@@ -33,8 +33,11 @@ util.inherits(AddtemplateGenerator, yeoman.generators.Base);
 
 AddtemplateGenerator.prototype.preGenActions = function preGenActions() {
 
+
+
+    this.rootFolder = process.cwd();
     this.buildFilePath = path.join(process.cwd(), './build.json');
-    this._isModule();
+    this._isInModule();
 
     this.moduleName = JSON.parse(this.readFileAsString(path.join(process.cwd(), './build.json'))).name;
     // get project name
@@ -44,10 +47,10 @@ AddtemplateGenerator.prototype.preGenActions = function preGenActions() {
     this.metaFilePath = path.join(process.cwd(), './meta/' + this.moduleName + '.json');
 
 
-    console.log(this.moduleName);
-    console.log(this.projectName);
-    console.log(this.buildFilePath);
-    console.log(this.metaFilePath);
+    // console.log(this.moduleName);
+    // console.log(this.projectName);
+    // console.log(this.buildFilePath);
+    // console.log(this.metaFilePath);
 
 };
 
@@ -56,17 +59,21 @@ AddtemplateGenerator.prototype.generator = function generator() {
     // create templates directory
     this.mkdir("templates");
 
-    // create template file
+    // create template file ?
     var name = this.extraName ? this.moduleName + "-" + this.extraName : this.moduleName
-    this.template("_myModule.handlebars.html", "templates/" + name + ".handlebars.html");
+    var fileFullPath = path.join(this.rootFolder, "templates/" + name + ".handlebars.html");
+    if (!fs.existsSync(fileFullPath)) {
+        this.template("_myModule.handlebars.html", "templates/" + name + ".handlebars.html");
+    } else {
+        this.log.info(fileFullPath, "Already exists...");
+    }
 
     // update meta
-    var metaFile = JSON.parse(this.readFileAsString(this.metaFilePath));
-    this._pushOnce(metaFile[this.moduleName].requires, "handlebars");
-    this.write(this.metaFilePath, beautify(JSON.stringify(metaFile), {
-        indent_size: 3
-    }));
-
+    this._addDepsInMetaFile({
+        metaFullPath : this.metaFilePath,
+        moduleName : this.moduleName,
+        depsTab : ["handlebars"]
+    });
 
     // update build
     var buildFile = JSON.parse(this.readFileAsString(this.buildFilePath));
@@ -89,7 +96,7 @@ AddtemplateGenerator.prototype.notice = function notice() {
 //private
 // ------------------------------------------------------------------------------
 
-AddtemplateGenerator.prototype._isModule = function _isModule() {
+AddtemplateGenerator.prototype._isInModule = function _isInModule() {
     console.log(this.buildFilePath);
     if (!fs.existsSync(this.buildFilePath)) {
         this.log.error('Please use this command inside a module !\n');
@@ -117,7 +124,63 @@ AddtemplateGenerator.prototype._pushOnce = function _pushOnce(tab, el, inverse) 
 
     if (inverse) {
         tab.unshift(el);
+        return true;
     } else {
         tab.push(el);
+        return true;
     }
 }
+
+/*
+ * @method _addDepsInMetaFile
+ * @param {Object} [options]
+ *      @param {String} [options.metaFullPath]
+ *      @param {String} [options.moduleName]
+ *      @param {Array}  [options.depsTab]
+ * @private
+ *
+ */
+AddtemplateGenerator.prototype._addDepsInMetaFile = function _addDepsInMetaFile(options) {
+
+    var metaFullPath, moduleName,
+        i, depsTab, dep, depsLength,
+        // have to update the meta or not
+        update = false;
+
+    if (options) {
+        if (!options.metaFullPath) {
+            this.log.error(' addTemplate:index.js:_addDepsInMetaFile() : Please provide a metaFullPath !\n');
+            process.exit(1);
+        } else {
+            metaFullPath = options.metaFullPath;
+        }
+
+        if (!options.moduleName) {
+            this.log.error(' addTemplate:index.js:_addDepsInMetaFile() : Please provide a moduleName !\n');
+            process.exit(1);
+        } else {
+            moduleName = options.moduleName;
+        }
+
+        if (!options.depsTab) {
+            this.log.error(' addTemplate:index.js:_addDepsInMetaFile() : Please provide a depsTab !\n');
+            process.exit(1);
+        } else {
+            depsTab = options.depsTab;
+            depsLength = depsTab.length;
+        }
+    }
+
+    var metaFile = JSON.parse(this.readFileAsString(metaFullPath)),
+        requires = metaFile[moduleName].requires;
+
+        for (i = 0; i < depsLength; i++) {
+            dep = depsTab[i] ;
+            update = this._pushOnce(requires, dep);
+        }
+
+        if(update){
+            this.write( metaFullPath , JSON.stringify(metaFile) );
+        }
+
+    }

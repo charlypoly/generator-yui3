@@ -63,16 +63,22 @@ AddtemplateGenerator.prototype.generator = function generator() {
     var name = this.extraName ? this.moduleName + "-" + this.extraName : this.moduleName
     var fileFullPath = path.join(this.rootFolder, "templates/" + name + ".handlebars.html");
     if (!fs.existsSync(fileFullPath)) {
-        this.template("_myModule.handlebars.html", "templates/" + name + ".handlebars.html");
+        var data = this.engine(   this.readFileAsString(path.join(__dirname, "templates", "_myModule.handlebars.html"))   ,   {
+            projectName : this.projectName,
+            moduleName : this.moduleName,
+            extraName : this.extraName
+        });
+        this.write( "templates/" + name + ".handlebars.html" , data );
+
     } else {
         this.log.info(fileFullPath, "Already exists...");
     }
 
     // update meta
     this._addDepsInMetaFile({
-        metaFullPath : this.metaFilePath,
-        moduleName : this.moduleName,
-        depsTab : ["handlebars"]
+        metaFullPath: this.metaFilePath,
+        moduleName: this.moduleName,
+        depsTab: ["handlebars"]
     });
 
     // update build
@@ -85,12 +91,15 @@ AddtemplateGenerator.prototype.generator = function generator() {
     this.write(this.buildFilePath, beautify(JSON.stringify(buildFile), {
         indent_size: 3
     }));
-
 }
 
 AddtemplateGenerator.prototype.notice = function notice() {
+
+    var sreenName = this.extraName ? 'NAME' + ' + "-' + this.extraName + '"' : 'NAME';
+
     console.log(" ---------- copy/paste ----------")
-    console.log(" var markup = Y.templates[NAME]({}); ");
+    console.log(" var markup = Y.templates[" + sreenName + "]({}); ");
+
 }
 
 //private
@@ -174,13 +183,13 @@ AddtemplateGenerator.prototype._addDepsInMetaFile = function _addDepsInMetaFile(
     var metaFile = JSON.parse(this.readFileAsString(metaFullPath)),
         requires = metaFile[moduleName].requires;
 
-        for (i = 0; i < depsLength; i++) {
-            dep = depsTab[i] ;
-            update = this._pushOnce(requires, dep);
-        }
-
-        if(update){
-            this.write( metaFullPath , JSON.stringify(metaFile) );
-        }
-
+    for (i = 0; i < depsLength; i++) {
+        dep = depsTab[i];
+        update = this._pushOnce(requires, dep);
     }
+
+    if (update) {
+        this.write(metaFullPath, JSON.stringify(metaFile));
+    }
+
+}

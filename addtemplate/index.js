@@ -5,6 +5,7 @@ var path = require("path");
 var fs = require("fs");
 var beautify = require('js-beautify').js_beautify;
 
+
 var AddtemplateGenerator = module.exports = function AddtemplateGenerator(args, options, config) {
     yeoman.generators.Base.apply(this, arguments);
 
@@ -32,8 +33,6 @@ util.inherits(AddtemplateGenerator, yeoman.generators.Base);
 // 3 - update the build file
 
 AddtemplateGenerator.prototype.preGenActions = function preGenActions() {
-
-
 
     this.rootFolder = process.cwd();
     this.buildFilePath = path.join(process.cwd(), './build.json');
@@ -88,9 +87,11 @@ AddtemplateGenerator.prototype.generator = function generator() {
         buildFile.exec = [];
     }
     this._pushOnce(buildFile.exec, "yo yui3:handlebars");
-    this.write(this.buildFilePath, beautify(JSON.stringify(buildFile), {
-        indent_size: 3
-    }));
+
+    var buildFile = JSON.parse(this.readFileAsString(path.join(process.cwd(), './build.json')));
+
+    this.write(this.buildFilePath, this._beautify(JSON.stringify(buildFile)) );
+
 }
 
 AddtemplateGenerator.prototype.notice = function notice() {
@@ -189,7 +190,11 @@ AddtemplateGenerator.prototype._addDepsInMetaFile = function _addDepsInMetaFile(
     }
 
     if (update) {
-        this.write(metaFullPath, JSON.stringify(metaFile));
+        this.write(metaFullPath, this._beautify(JSON.stringify(metaFile)));
     }
 
+}
+
+AddtemplateGenerator.prototype._beautify = function _beautify(jsCode) {
+    return beautify(jsCode, { indent_size: 3 });
 }

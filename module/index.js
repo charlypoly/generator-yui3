@@ -229,7 +229,7 @@ ModuleGenerator.prototype.createStructure = function createStructure() {
     this.mkdir(this.name);
     this.mkdir(this.name + "/js");
 
-    this.write(this.name +"/build.json", this._generateBuild());
+    this.write(this.name +"/build.json", this._beautify(this._generateBuild()) );
 
     this.configurators[this.moduleType].call(this); //configure with proper module type
 };
@@ -454,7 +454,7 @@ ModuleGenerator.prototype._configureBase = function _configureBase() {
         meta[this.name].requires.push('base');
     }
 
-    this.write(this.name +"/meta/"+this.name+".json", JSON.stringify(meta));
+    this.write(this.name +"/meta/"+this.name+".json", this._beautify(JSON.stringify(meta)) );
 }
 
 /**
@@ -466,4 +466,7 @@ ModuleGenerator.prototype._configureBase = function _configureBase() {
  */
 ModuleGenerator.prototype._configureWidget = function _configureWidget() {
     //add widget deps in meta file
+}
+ModuleGenerator.prototype._beautify = function _beautify(jsCode) {
+    return beautify(jsCode, { indent_size: 3 });
 }

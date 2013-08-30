@@ -3,6 +3,7 @@ var util = require('util');
 var yeoman = require('yeoman-generator');
 var path = require('path'),
 fs      = require('fs');
+var beautify = require('js-beautify').js_beautify;
 
 var ModuleGenerator = module.exports = function ModuleGenerator(args, options, config) {
     // By calling `NamedBase` here, we get the argument to the subgenerator call

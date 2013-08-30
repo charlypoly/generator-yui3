@@ -88,7 +88,10 @@ AddtemplateGenerator.prototype.generator = function generator() {
     }
     this._pushOnce(buildFile.exec, "yo yui3:handlebars");
 
-    var buildFile = JSON.parse(this.readFileAsString(path.join(process.cwd(), './build.json')));
+    if (!buildFile.postexec) {
+        buildFile.postexec = [];
+    }
+    this._pushOnce(buildFile.postexec, "ruby ../../../../../../script/post_shifter_cleaner.rb");
 
     this.write(this.buildFilePath, this._beautify(JSON.stringify(buildFile)) );
 

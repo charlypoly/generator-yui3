@@ -34,9 +34,9 @@ var AddlangGenerator = module.exports = function AddlangGenerator(args, options,
         this.langToAdd = JSON.parse(this.readFileAsString(this.pathToGenYUI3)).lang;
     }
 
-    if (this.langToAdd) {
-        console.log("add lang : " + this.langToAdd);
-    }
+    // if (this.langToAdd) {
+    //     console.log("add lang : " + this.langToAdd);
+    // }
 
 };
 
@@ -49,14 +49,11 @@ AddlangGenerator.prototype.actions = function actions() {
         metaFile = JSON.parse(this.readFileAsString(  this.metaFilePath  )),
         updateMeta = false;
 
-
-
-
-
     // create lang folder if needed
     // ---------------------------------------------------------
-    if (fs.existsSync(path.join(this.rootFolder, "lang"))) {
+    if (!fs.existsSync(path.join(this.rootFolder, "lang"))) {
         this.mkdir(path.join(this.rootFolder, "lang"));
+        metaFile[this.moduleName].lang = [];
     }
 
     // create lang files if needed & update build.json

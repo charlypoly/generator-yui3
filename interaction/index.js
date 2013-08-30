@@ -13,6 +13,12 @@ var InteractionGenerator = module.exports = function InteractionGenerator(args, 
 
 util.inherits(InteractionGenerator, yeoman.generators.NamedBase);
 
+InteractionGenerator.prototype.setPaths = function setPaths() {
+
+    this.generatorYUI3FilePath = path.join(process.cwd(), ".generator-yui3.json");
+
+};
+
 InteractionGenerator.prototype.updateGeneratorYui3 = function updateGeneratorYui3() {
 
     this.projectName = this._currentProjectName();
@@ -22,22 +28,19 @@ InteractionGenerator.prototype.updateGeneratorYui3 = function updateGeneratorYui
 
     var stringData = this.readFileAsString(path.join(__dirname, "../app/templates/.generator-yui3.json"));
 
-    var filePath = path.join(process.cwd(), ".generator-yui3.json");
-
-    var file = JSON.parse(this.readFileAsString(filePath));
+    var file = JSON.parse(this.readFileAsString(this.generatorYUI3FilePath));
 
     file.interactions[this.projectNameToAdd] = {};
     file.interactions[this.projectNameToAdd].base = this.base;
 
-    this.write(filePath, JSON.stringify(file));
+    this.write(this.generatorYUI3FilePath, JSON.stringify(file));
 
 };
 
 InteractionGenerator.prototype.updateLoaderCommon = function updateLoaderCommon() {
 
     var stringData = this.readFileAsString(path.join(__dirname, "../app/templates/loader/tests/_common.js"));
-    var yui3GenOriginFilePath = path.join(process.cwd(), ".generator-yui3.json");
-    var interactions = JSON.parse(this.readFileAsString(yui3GenOriginFilePath)).interactions;
+    var interactions = JSON.parse(this.readFileAsString(this.generatorYUI3FilePath)).interactions;
 
     var keys = Object.keys(interactions),
         i,
@@ -62,10 +65,34 @@ InteractionGenerator.prototype.updateLoaderCommon = function updateLoaderCommon(
         "projectName": this.projectName
     }));
 
+    var muVar = this._lookForProjectRoot
+    console.log(muVar);
+
 }
 
 // get currentProjectName
 InteractionGenerator.prototype._currentProjectName = function _currentProjectName() {
     var pkg = JSON.parse(this.readFileAsString(path.join(process.cwd(), './package.json')));
     return pkg.name;
+
+
+};
+
+/*
+ * @method _lookForProjectRoot
+ *
+ */
+TestgenGenerator.prototype._lookForProjectRoot = function _lookForProjectRoot() {
+    var model = "";
+
+    while (true) {
+
+        var pathFile = path.join(process.cwd(), model, './package.json');
+        if (fs.existsSync(pathFile)) {
+            return pathFile;
+        }
+        //change path
+        model = model + "../";
+    }
+
 };

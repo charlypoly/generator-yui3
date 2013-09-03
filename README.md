@@ -10,8 +10,19 @@ A Yeoman generator for YUI3 application using Shifter
 **Installation**
 ```
 npm install
+```
+```
 sudo npm install js-beautify
 ```
+(Pour le moment)
+```
+sudo npm link
+```
+
+
+
+
+
 
 **Create project**
 

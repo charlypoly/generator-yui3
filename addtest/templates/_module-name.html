@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title><%= moduleName %> tests</title>
+
+
+     
+</head>
+<body class="yui3-skin-sam">
+<h1><%= moduleName %> Tests</h1>
+<div id="testLogger"></div>
+<script>
+
+YUI({
+    
+    modules: {
+        '<%= moduleName %>-test': {
+            fullpath: './assets/<%= moduleName %>-test.js',
+            requires: ["test","<%= moduleName %>"]
+        }
+    }
+
+    // Uncomment this line if you want coverage for this single module
+    //,coverage: ['<%= moduleName %>'],
+
+}).use("test", "test-console", "<%= moduleName %>-test", function(Y) {
+  
+    window.Y = Y; // keep this for the yui selenium driver
+
+    //create the console
+    (new Y.Test.Console({
+        newestOnTop : false,
+        filters: {
+            pass: true,
+            fail: true
+        }
+    })).render('#testLogger');
+
+    Y.Test.Runner.on('fail', function (e) {
+        if (e.error.cause && e.error.stack) {
+            console.error(e.error.stack);
+        }
+    });
+  
+    Y.Test.Runner.run();
+    
+});
+</script>
+</body>
+</html>

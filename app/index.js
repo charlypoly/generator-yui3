@@ -43,7 +43,7 @@ Yui3Generator.prototype.create = function create() {
         this.copy('.generator-yui3.json', this.projectName+'/.generator-yui3.json');
      }
 
-     this.copy('project/package.json', this.projectName+'/package.json');
+     // this.copy('project/package.json', this.projectName+'/package.json');
 
      // # src/ folder
 
@@ -71,9 +71,9 @@ Yui3Generator.prototype.create = function create() {
         this.projectName+'/src/'+this.projectName+'-loader/build.json'
       );
 
-     // # test folder
-     this.mkdir(this.projectName+'/tests');
-     this.copy('project/tests/index.html', this.projectName+'/tests/index.html');
+     // # test folder // keep the creation of a project minimal
+     // this.mkdir(this.projectName+'/tests');
+     // this.copy('project/tests/index.html', this.projectName+'/tests/index.html');
 
 };
 

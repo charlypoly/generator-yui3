@@ -8,13 +8,12 @@ A Yeoman generator for YUI3 application using Shifter
 ![yui](http://ebmedia.eventbrite.com/s3-s3/eventlogos/2254509/828699663-2.jpg)
 
 **Installation**
+
+sudo is necessary because of js-beautify
 ```
-npm install
+sudo npm install
 ```
-```
-sudo npm install js-beautify
-```
-(Pour le moment)
+(For the moment)
 ```
 sudo npm link
 ```

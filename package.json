@@ -31,7 +31,8 @@
     "yeoman-generator": "~0.13.0",
     "yui" : "3.9.0",
     "glob" : "3.2.6",
-    "js-beautify" : "1.4.0"
+    "js-beautify" : "1.4.0",
+    "yo": "1.0.4"
   },
   "devDependencies": {
     "mocha": "~1.12.0"

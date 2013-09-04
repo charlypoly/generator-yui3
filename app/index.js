@@ -48,9 +48,11 @@ Yui3Generator.prototype.create = function create() {
      // # src/ folder
 
      //   # src/common folder
-     this.mkdir(this.projectName+'/src/common');
-     this.mkdir(this.projectName+'/src/common/docs');
-     this.directory('project/src/common/docs', this.projectName+'/src/common/docs');
+
+    // keep the creation of a project minimal
+     // this.mkdir(this.projectName+'/src/common');
+     // this.mkdir(this.projectName+'/src/common/docs');
+     // this.directory('project/src/common/docs', this.projectName+'/src/common/docs');
 
      //   # src/<projectname>-loader folder
 

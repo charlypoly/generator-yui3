@@ -4,25 +4,24 @@ var yeoman = require('yeoman-generator');
 var fs = require("fs");
 var Handlebars = require('yui/handlebars').Handlebars;
 var path = require("path");
+var scriptBase = require('../script-base');
 
+var Generator = module.exports = function Generator(args, options, config) {
+    scriptBase.apply(this, arguments);
 
-var HandlebarsGenerator = module.exports = function HandlebarsGenerator(args, options, config) {
-    yeoman.generators.Base.apply(this, arguments);
+    this.setUpPaths();
+    this._isInModule();
 };
 
-util.inherits(HandlebarsGenerator, yeoman.generators.Base);
+util.inherits(Generator, scriptBase);
 
-HandlebarsGenerator.prototype.setPaths = function setPaths() {
-
-    this.rootPath = process.cwd();
-    this.templatesPath = path.join(this.rootPath, "./templates");
-    this.jsPath = path.join(this.rootPath, "./js");
-
+Generator.prototype.setPaths = function setPaths() {
+    this.templatesFolderPath = path.join(this.moduleRootPath, "./templates");
 };
 
-HandlebarsGenerator.prototype.actions = function actions() {
+Generator.prototype.actions = function actions() {
 
-    var files = fs.readdirSync(this.templatesPath),
+    var files = fs.readdirSync(this.templatesFolderPath),
         i, fileLength = files.length,
         fileName, matches, templateFileRaw;
 
@@ -32,9 +31,9 @@ HandlebarsGenerator.prototype.actions = function actions() {
         matches = fileName.match(/^([^\.]*)\.handlebars.html$/);
 
         if (matches) {
-            templateFileRaw = this.readFileAsString(path.join(this.templatesPath, fileName));
+            templateFileRaw = this.readFileAsString(path.join(this.templatesFolderPath, fileName));
             var content = "Y.namespace('templates')['" + matches[1] + "'] = Y.Handlebars.template(" + Handlebars.precompile(templateFileRaw) + ");\n"
-            this.write(path.join(this.templatesPath, matches[1] + ".js"), content);
+            this.write(path.join(this.templatesFolderPath, matches[1] + ".js"), content);
         }
     }
 

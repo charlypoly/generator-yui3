@@ -4,45 +4,31 @@ var yeoman = require('yeoman-generator');
 var path = require("path");
 var fs = require("fs");
 var beautify = require('js-beautify').js_beautify;
+var scriptBase = require('../script-base');
 
-var AddlangGenerator = module.exports = function AddlangGenerator(args, options, config) {
-    yeoman.generators.Base.apply(this, arguments);
+var Generator = module.exports = function Generator(args, options, config) {
 
-    this.rootFolder = process.cwd();
-    this.buildFilePath = path.join(this.rootFolder, './build.json');
-
-
+    scriptBase.apply(this, arguments);
+    this.setUpPaths();
     this._isInModule();
-    this.moduleName = JSON.parse(this.readFileAsString(this.buildFilePath)).name;
-    this.metaFilePath = path.join(this.rootFolder, 'meta/' + this.moduleName + '.json');
-    this.pathToGenYUI3 = path.join(process.cwd(), "../..", ".generator-yui3.json");
 
-    // console.log(this.rootFolder);
-    // console.log(this.buildFilePath);
-    // console.log(this.moduleName);
-    // console.log(this.pathToGenYUI3);
 
     var remain = options.argv.remain,
         remainLength = remain.length;
     this.langToAdd = [];
 
-    // extra name for file template
     if (remainLength) {
         this.langToAdd = remain;
     } else {
         // def
-        this.langToAdd = JSON.parse(this.readFileAsString(this.pathToGenYUI3)).lang;
+        this.langToAdd = JSON.parse(this.readFileAsString(this.generatorFileConfigPath)).lang;
     }
-
-    // if (this.langToAdd) {
-    //     console.log("add lang : " + this.langToAdd);
-    // }
 
 };
 
-util.inherits(AddlangGenerator, yeoman.generators.Base);
+util.inherits(Generator, scriptBase);
 
-AddlangGenerator.prototype.actions = function actions() {
+Generator.prototype.actions = function actions() {
 
     var lang, langLength = this.langToAdd.length,
         i, fileToCreate,
@@ -51,26 +37,26 @@ AddlangGenerator.prototype.actions = function actions() {
 
     // create lang folder if needed
     // ---------------------------------------------------------
-    if (!fs.existsSync(path.join(this.rootFolder, "lang"))) {
-        this.mkdir(path.join(this.rootFolder, "lang"));
-        metaFile[this.moduleName].lang = [];
+    if (!fs.existsSync(path.join(this.moduleRootPath, "lang"))) {
+        this.mkdir(path.join(this.moduleRootPath, "lang"));
+        metaFile[this.entityName].lang = [];
     }
 
     // create lang files if needed & update build.json
     // ---------------------------------------------------------
 
-    fileToCreate = path.join(this.rootFolder, "/lang/", this.moduleName + ".js");
+    fileToCreate = path.join(this.moduleRootPath, "/lang/", this.entityName + ".js");
     if (!fs.existsSync(fileToCreate)) {
         this.write(fileToCreate, "{}");
     }
 
     for (i = 0; i < langLength; i++) {
         lang = this.langToAdd[i];
-        fileToCreate = path.join(this.rootFolder, "/lang/", this.moduleName + "_" + lang + ".js");
+        fileToCreate = path.join(this.moduleRootPath, "/lang/", this.entityName + "_" + lang + ".js");
         if (!fs.existsSync(fileToCreate)) {
             updateMeta = true;
             this.write(fileToCreate, "{}");
-            this._pushOnce( metaFile[this.moduleName].lang , lang);
+            this._pushOnce( metaFile[this.entityName].lang , lang);
         }
     }
 
@@ -84,7 +70,7 @@ AddlangGenerator.prototype.actions = function actions() {
 
 // private
 // --------------------------------------------------------------------------
-AddlangGenerator.prototype._isInModule = function _isInModule() {
+Generator.prototype._isInModule = function _isInModule() {
     if (!fs.existsSync(this.buildFilePath)) {
         this.log.error('Please use this command inside a module !\n');
         process.exit(1);
@@ -99,7 +85,7 @@ AddlangGenerator.prototype._isInModule = function _isInModule() {
  * @param el {String} the element to push in
  * @param inverse if true do not push but unshift
  */
-AddlangGenerator.prototype._pushOnce = function _pushOnce(tab, el, inverse) {
+Generator.prototype._pushOnce = function _pushOnce(tab, el, inverse) {
     var i,
         tabLength = tab.length;
 
@@ -117,6 +103,6 @@ AddlangGenerator.prototype._pushOnce = function _pushOnce(tab, el, inverse) {
         return true;
     }
 }
-AddlangGenerator.prototype._beautify = function _beautify(jsCode) {
+Generator.prototype._beautify = function _beautify(jsCode) {
     return beautify(jsCode, { indent_size: 3 });
 }

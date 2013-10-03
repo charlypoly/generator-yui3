@@ -9,7 +9,7 @@ var path = require('path');
 var util = require('util');
 var yeoman = require('yeoman-generator');
 var fs = require('fs');
-var utils = require('./util');
+var utils = require('./utils');
 
 var Generator = module.exports = function Generator() {
     yeoman.generators.Base.apply(this, arguments);

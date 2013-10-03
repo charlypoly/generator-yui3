@@ -127,6 +127,20 @@ Create the lang part of a YUI module. Without arguments the scaffolder creates a
 yo yui3:addlang <lang>[, <lang>,...]
 ```
 
+**Use yo yui3:build-module to shift the module**
+
+This can be use whenever you are inside the module (js, scss, build, meta, ...)
+
+```
+yo yui3:build-module
+```
+
+1 step integration with your favorite editor example with Sublime-Text : Tool --> Build System --> New Build System.
+then shell_cmd = "yo yui3:build-module" that's it ;)
+
+
+
+
 
 internals tasks for Shifter
 ==

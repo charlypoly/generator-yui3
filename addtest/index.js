@@ -4,7 +4,7 @@ var yeoman = require('yeoman-generator');
 var path = require("path");
 var fs = require("fs");
 var scriptBase = require('../script-base');
-var utils = require('../util');
+var utils = require('../utils');
 
 var Generator = module.exports = function Generator(args, options, config) {
     scriptBase.apply(this, arguments);

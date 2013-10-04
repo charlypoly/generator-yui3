@@ -24,7 +24,12 @@ util.inherits(Generator, yeoman.generators.Base);
 Generator.prototype.setUpPaths = function setUpPaths() {
 
     this.projectRootPath = utils.reachFirst(".generator-yui3.json").pathFolder;
-    this.generatorFileConfigPath = path.join(this.projectRootPath, ".generator-yui3.json");
+    this.generatorFileConfigPath = utils.reachFirst(".generator-yui3.json").pathFile;
+    // is source modules and build modules have same name ?
+    this.prefixedModuleName = this.generatorFileConfigPath["prefixed-modules"];
+
+    // console.log(this.prefixedModuleName);
+
     // where we lunch yo
     this.currentPath = process.cwd();
     // as we are in a module we set the projectName
@@ -57,7 +62,7 @@ Generator.prototype.setUpPaths = function setUpPaths() {
         this.buildFilePath = path.join(this.currentPath, './build.json');
         var buildFile = JSON.parse(this.readFileAsString(this.buildFilePath));
         // console.log(buildFile);
-        this.entityName = buildFile.name;
+        this.entityName = this.moduleName = buildFile.name;
 
         // meta file path
         this.metaFilePath = path.join(this.currentPath, 'meta/' + this.entityName + '.json');
@@ -102,4 +107,13 @@ Generator.prototype._pushOnce = function _pushOnce(tab, el, inverse) {
         tab.push(el);
         return true;
     }
+};
+
+/*
+ * @method getModuleDepedencies
+ * return {Array}
+ */
+Generator.prototype.getModuleDepedencies = function getModuleDepedencies() {
+    var metaFile = JSON.parse(this.readFileAsString(this.metaFilePath));
+    return metaFile.requires;
 };

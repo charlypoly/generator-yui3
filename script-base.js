@@ -25,6 +25,7 @@ Generator.prototype.setUpPaths = function setUpPaths() {
 
     this.projectRootPath = utils.reachFirst(".generator-yui3.json").pathFolder;
     this.generatorFileConfigPath = utils.reachFirst(".generator-yui3.json").pathFile;
+    this.generatorFileConfig = JSON.parse(this.readFileAsString(this.generatorFileConfigPath));
     // is source modules and build modules have same name ?
     this.prefixedModuleName = this.generatorFileConfigPath["prefixed-modules"];
 
@@ -33,7 +34,9 @@ Generator.prototype.setUpPaths = function setUpPaths() {
     // where we lunch yo
     this.currentPath = process.cwd();
     // as we are in a module we set the projectName
-    this.projectName = JSON.parse(this.readFileAsString(this.generatorFileConfigPath)).projectName;
+
+
+    this.projectName = this.generatorFileConfig.projectName;
 
     // --------------------------------------------------
     // generator part

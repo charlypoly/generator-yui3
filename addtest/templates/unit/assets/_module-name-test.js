@@ -15,7 +15,7 @@ YUI.add("<%= moduleName %>-test", function(Y) {
 
         "test <%= moduleName %> generation": function () {
 
-            var instance = new Y.<%= _.capitalize(moduleName) %>({});
+            var instance = new Y.PutHereTheNameOfYourClass({});
 
             Y.Assert.isObject(instance);
 

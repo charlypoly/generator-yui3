@@ -11,5 +11,8 @@
       }
    },
    "interactions" : {},
-   "lang" : ["fr", "en", "es", "de"]
+   "lang" : ["fr", "en", "es", "de"],
+   "software_version": {
+        "yui": "3.13.0"
+    }
 }

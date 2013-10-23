@@ -14,11 +14,8 @@ YUI.add("<%= moduleName %>-test", function(Y) {
         tearDown: function () {},
 
         "test <%= moduleName %> generation": function () {
-
-            var instance = new Y.PutHereTheNameOfYourClass({});
-
+            var instance = new Y.namespace("my.namespace.perso").PutHereTheNameOfYourClass({});
             Y.Assert.isObject(instance);
-
         }
     });
 

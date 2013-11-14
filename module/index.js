@@ -46,6 +46,29 @@ ModuleGenerator.prototype.beforeCreate = function beforeCreate(){
     }
 };
 
+/**
+ * @method chooseNamespace
+ *
+ * Enter a namespace for the module if wanted
+ *
+ * default: Y.ModuleName
+ * else: Y.namespace('MyNamespace').ModuleName
+ *
+ */
+ModuleGenerator.prototype.chooseNamespace = function chooseNamespace(){
+   var cb = this.async();
+
+   this.prompt({
+      "type" : 'input',
+      "name" : 'module-namespace',
+      "message" : 'Choose a module namespace (defaults to Y.)',
+      "default" : ''
+   }, this._.bind(function(answers) {
+      this.namespace = answers['module-namespace'];
+      cb();
+   }, this));
+};
+
 
 /**
  *

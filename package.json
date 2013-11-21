@@ -1,54 +1,46 @@
 {
-  "name": "generator-yui3",
-  "version": "0.0.0",
-  "description": "A generator for Yeoman",
-  "keywords": [
-    "yeoman-generator"
-  ],
-  "homepage": "https://github.com/wittydeveloper/generator-yui3",
-  "bugs": "https://github.com/wittydeveloper/generator-yui3/issues",
-  "contributors": [
-    {
-      "name": "Charly Poly",
-      "email": "cpoly55@gmail.com",
-      "url": "https://github.com/wittydeveloper"
+    "name": "generator-yui3",
+    "version": "0.0.0",
+    "author": "Charly Poly <cpoly55@gmail.com>",
+    "description": "A generator for Yeoman",
+    "keywords": [
+        "yeoman-generator"
+    ],
+    "homepage": "https://github.com/wittydeveloper/generator-yui3",
+    "bugs": "https://github.com/wittydeveloper/generator-yui3/issues",
+    "contributors": [{
+        "name": "BenNG",
+        "email": "benjamin.kim.nguyen@gmail.com",
+        "url": "https://github.com/benng"
+    }],
+    "main": "app/index.js",
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/wittydeveloper/generator-yui3.git"
     },
-    {
-      "name": "BenNG",
-      "email": "benjamin.kim.nguyen@gmail.com",
-      "url": "https://github.com/benng"
-    }
-  ],
-  "main": "app/index.js",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/wittydeveloper/generator-yui3.git"
-  },
-  "scripts": {
-    "test": "mocha"
-  },
-  "dependencies": {
-    "yeoman-generator": "~0.13.4",
-    "yui": "3.12.0",
-    "glob": "3.2.6",
-    "js-beautify": "1.4.0",
-    "yo": "~1.0.4",
-    "grunt-cli": "~0.1.9",
-    "bower": "~1.2.7"
-  },
-  "devDependencies": {
-    "mocha": "~1.12.0"
-  },
-  "peerDependencies": {
-    "yo": "1.0.4"
-  },
-  "engines": {
-    "node": ">=0.8.0",
-    "npm": ">=1.2.10"
-  },
-  "licenses": [
-    {
-      "type": "MIT"
-    }
-  ]
+    "scripts": {
+        "test": "mocha"
+    },
+    "dependencies": {
+        "yeoman-generator": "~0.13.4",
+        "yui": "3.13.0",
+        "glob": "3.2.6",
+        "js-beautify": "1.4.0",
+        "yo": "~1.0.4",
+        "grunt-cli": "~0.1.9",
+        "bower": "~1.2.7"
+    },
+    "devDependencies": {
+        "mocha": "~1.12.0"
+    },
+    "peerDependencies": {
+        "yo": "1.0.4"
+    },
+    "engines": {
+        "node": ">=0.8.0",
+        "npm": ">=1.2.10"
+    },
+    "licenses": [{
+        "type": "MIT"
+    }]
 }

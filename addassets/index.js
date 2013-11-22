@@ -21,3 +21,19 @@ Generator.prototype.createStructure = function createStructure() {
     this.template("assets/skins/sam/moduleName-skin.css", "assets/skins/sam/"+ this.moduleName +"-skin.css");
     this.template("assets/moduleName-core.css", "assets/"+ this.moduleName +"-core.css");
 };
+
+Generator.prototype.updateMeta = function updateMeta() {
+    var metaFile = JSON.parse(this.readFileAsString(this.metaFilePath));
+    metaFile[this.moduleName].skinnable = true;
+    this.write(this.metaFilePath, this._beautify(JSON.stringify(metaFile)) );
+};
+
+Generator.prototype.advices = function advices() {
+    console.log("Please...");
+    console.log("shift your module");
+    console.log("shift your loader");
+};
+
+Generator.prototype._beautify = function _beautify(jsCode) {
+    return beautify(jsCode, { indent_size: 3 });
+}

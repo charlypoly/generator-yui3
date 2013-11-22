@@ -3,7 +3,6 @@ var util = require('util');
 var yeoman = require('yeoman-generator');
 var path = require('path'),
 fs      = require('fs');
-var beautify = require('js-beautify').js_beautify;
 
 var ModuleGenerator = module.exports = function ModuleGenerator(args, options, config) {
     // By calling `NamedBase` here, we get the argument to the subgenerator call
@@ -253,7 +252,7 @@ ModuleGenerator.prototype.createStructure = function createStructure() {
     this.mkdir(this.name);
     this.mkdir(this.name + "/js");
 
-    this.write(this.name +"/build.json", this._beautify(this._generateBuild()) );
+    this.write(this.name +"/build.json", JSON.stringify(this._generateBuild(), null, 4) );
 
     this.configurators[this.moduleType].call(this); //configure with proper module type
 };
@@ -434,7 +433,7 @@ ModuleGenerator.prototype._generateBuild = function() {
         }
     }
 
-    return JSON.stringify(build);
+    return build;
 
 };
 
@@ -478,19 +477,5 @@ ModuleGenerator.prototype._configureBase = function _configureBase() {
         meta[this.name].requires.push('base');
     }
 
-    this.write(this.name +"/meta/"+this.name+".json", this._beautify(JSON.stringify(meta)) );
-}
-
-/**
- * @method this._setDefaultConfiguration
- * @private
- *
- *  Return the default configuration
- *
- */
-ModuleGenerator.prototype._configureWidget = function _configureWidget() {
-    //add widget deps in meta file
-}
-ModuleGenerator.prototype._beautify = function _beautify(jsCode) {
-    return beautify(jsCode, { indent_size: 3 });
+    this.write(this.name +"/meta/"+this.name+".json", JSON.stringify(meta, null, 4) );
 }

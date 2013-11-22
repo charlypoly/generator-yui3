@@ -3,7 +3,6 @@ var util = require('util');
 var yeoman = require('yeoman-generator');
 var path = require("path");
 var fs = require("fs");
-var beautify = require('js-beautify').js_beautify;
 var scriptBase = require('../script-base');
 
 var Generator = module.exports = function Generator(args, options, config) {
@@ -61,7 +60,7 @@ Generator.prototype.actions = function actions() {
     }
 
     if(updateMeta){
-        this.write(this.metaFilePath, this._beautify(JSON.stringify(metaFile)) );
+        this.write(this.metaFilePath, JSON.stringify(metaFile, null, 4) );
     }else{
         this.log.info("Nothing to do...");
     }
@@ -102,7 +101,4 @@ Generator.prototype._pushOnce = function _pushOnce(tab, el, inverse) {
         tab.push(el);
         return true;
     }
-}
-Generator.prototype._beautify = function _beautify(jsCode) {
-    return beautify(jsCode, { indent_size: 3 });
 }

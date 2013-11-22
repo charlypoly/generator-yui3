@@ -3,7 +3,6 @@ var util = require('util');
 var yeoman = require('yeoman-generator');
 var path = require("path");
 var fs = require("fs");
-var beautify = require('js-beautify').js_beautify;
 var scriptBase = require('../script-base');
 
 
@@ -59,7 +58,7 @@ Generator.prototype.generator = function generator() {
     this._addDepsInMetaFile({
         metaFullPath: this.metaFilePath,
         moduleName: this.entityName,
-        depsTab: ["handlebars"]
+        depsTab: ["handlebars-base"]
     });
 
     // update build
@@ -75,7 +74,7 @@ Generator.prototype.generator = function generator() {
     }
     this._pushOnce(buildFile.postexec, "ruby ../../../../../../script/post_shifter_cleaner.rb");
 
-    this.write(this.buildFilePath, this._beautify(JSON.stringify(buildFile)) );
+    this.write(this.buildFilePath, JSON.stringify(buildFile, null, 4) );
 
 }
 
@@ -141,11 +140,7 @@ Generator.prototype._addDepsInMetaFile = function _addDepsInMetaFile(options) {
     }
 
     if (update) {
-        this.write(metaFullPath, this._beautify(JSON.stringify(metaFile)));
+        this.write(metaFullPath, JSON.stringify(metaFile, null, 4));
     }
 
-}
-
-Generator.prototype._beautify = function _beautify(jsCode) {
-    return beautify(jsCode, { indent_size: 3 });
 }

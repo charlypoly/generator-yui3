@@ -25,7 +25,6 @@
         "yeoman-generator": "~0.13.4",
         "yui": "3.13.0",
         "glob": "3.2.6",
-        "js-beautify": "1.4.0",
         "yo": "~1.0.4",
         "grunt-cli": "~0.1.9",
         "bower": "~1.2.7"

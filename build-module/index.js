@@ -10,6 +10,7 @@ child;
 
 var Generator = module.exports = function Generator(args, options, config) {
     scriptBase.apply(this, arguments);
+    this.setUpPaths();
 
     // TODO create a this._isInModule() different from this._isAtRootModule()
 };

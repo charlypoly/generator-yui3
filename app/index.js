@@ -13,10 +13,12 @@ var Yui3Generator = module.exports = function Yui3Generator(args, options, confi
   //  - https://github.com/yeoman/generator/wiki/base#baseusage
   //  - https://github.com/yeoman/generator/wiki/base#basedefaultfor
 
-  if (args.length < 1) {
-    this.log.write('Usage : yo yui3 <project_name> [--!config]');
-    process.exit(1);
-  }
+  // if (args.length < 1) {
+  //   this.log.write('Usage : yo yui3 <project_name> [--!config]');
+  //   process.exit(1);
+  // }
+
+  this.args = args
 
 };
 
@@ -24,56 +26,41 @@ util.inherits(Yui3Generator, yeoman.generators.Base);
 
 Yui3Generator.prototype.create = function create() {
 
-     var config_file = this._.isUndefined(this.options['no-config']) ?  true : !!this.options['no-config'],
-     gitignore = this._.isUndefined(this.options['gitignore']) ?  false : !!this.options['gitignore'];
+    if (this.options["config-file-only"]) {
 
-     if (gitignore && config_file) {
-      this._appendToGitignore();
-     }
+        this.projectName = path.basename(process.cwd())
+        this.copy('.generator-yui3.json','.generator-yui3.json');
+        this.copy('.generator-yui3.example.json', '.generator-yui3.example.json');
+    } else {
 
-     this.projectName = this._.slugify(this.args[0]);
+        this.projectName = this._.slugify(this.args[0]);
 
-     this.log.info("Init "+this.projectName+' scaffold');
-     this.log.info('init project with' +(config_file ? '' : 'out')+ ' config file');
+        var config_file = this._.isUndefined(this.options['no-config']) ? true : !! this.options['no-config'],
+            gitignore = this._.isUndefined(this.options['gitignore']) ? false : !! this.options['gitignore'];
+
+        if (gitignore && config_file) {
+            this._appendToGitignore();
+        }
+
+        this.log.info("Init " + this.projectName + ' scaffold');
+        this.log.info('init project with' + (config_file ? '' : 'out') + ' config file');
 
 
-     this.mkdir(this.projectName);
+        this.mkdir(this.projectName);
 
-     if (config_file) {
-        this.copy('.generator-yui3.json', this.projectName+'/.generator-yui3.json');
-     }
+        if (config_file) {
+            this.copy('.generator-yui3.json', this.projectName + '/.generator-yui3.json');
+            this.copy('.generator-yui3.example.json', this.projectName + '/.generator-yui3.example.json');
+        }
 
-     // this.copy('project/package.json', this.projectName+'/package.json');
+        this.mkdir(this.projectName + '/src/' + this.projectName + '-loader');
+        this.directory('project/src/projectName-loader/scripts', this.projectName + '/src/' + this.projectName + '-loader/scripts');
+        this.directory('project/src/projectName-loader/template', this.projectName + '/src/' + this.projectName + '-loader/template');
 
-     // # src/ folder
-
-     //   # src/common folder
-
-    // keep the creation of a project minimal
-     // this.mkdir(this.projectName+'/src/common');
-     // this.mkdir(this.projectName+'/src/common/docs');
-     // this.directory('project/src/common/docs', this.projectName+'/src/common/docs');
-
-     //   # src/<projectname>-loader folder
-
-     this.mkdir(this.projectName+'/src/'+this.projectName+'-loader');
-     this.directory('project/src/projectName-loader/scripts', this.projectName+'/src/'+this.projectName+'-loader/scripts');
-     this.directory('project/src/projectName-loader/template', this.projectName+'/src/'+this.projectName+'-loader/template');
-
-     this.mkdir(
-        this.projectName+'/src/'+this.projectName+'-loader/js');
-     this.copy(
-        'project/src/projectName-loader/js/projectName.js',
-        this.projectName+'/src/'+this.projectName+'-loader/js/'+this.projectName+'.js'
-      );
-     this.copy(
-        'project/src/projectName-loader/build.json',
-        this.projectName+'/src/'+this.projectName+'-loader/build.json'
-      );
-
-     // # test folder // keep the creation of a project minimal
-     // this.mkdir(this.projectName+'/tests');
-     // this.copy('project/tests/index.html', this.projectName+'/tests/index.html');
+        this.mkdir(this.projectName + '/src/' + this.projectName + '-loader/js');
+        this.copy('project/src/projectName-loader/js/projectName.js', this.projectName + '/src/' + this.projectName + '-loader/js/' + this.projectName + '.js');
+        this.copy('project/src/projectName-loader/build.json', this.projectName + '/src/' + this.projectName + '-loader/build.json');
+    }
 
 };
 
@@ -100,7 +87,7 @@ Yui3Generator.prototype._appendToGitignore = function() {
  * @method tests
  *
  */
- Yui3Generator.prototype.loader = function loader() {
+ Yui3Generator.prototype._loader = function _loader() {
     this.mkdir(this.projectName + '/src/' + this.projectName + '-loader/tests');
     this.mkdir(this.projectName + '/src/' + this.projectName + '-loader/scripts');
     this.template("loader/tests/_common.js", this.projectName + '/src/' + this.projectName + '-loader/tests/' +"common.js" );

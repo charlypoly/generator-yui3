@@ -1,18 +1,3 @@
 {
-   "projectName" : "<%= projectName %>",
-   "modules" : {
-      "base" : {
-         "create" : [],
-         "i18n" : ["en"]
-      },
-      "widget" : {
-         "create" : ["templates"],
-         "i18n" : ["en"]
-      }
-   },
-   "interactions" : {},
-   "lang" : ["fr", "en", "es", "de"],
-   "software_version": {
-        "yui": "3.13.0"
-    }
+   "projectName" : "<%= projectName %>"
 }

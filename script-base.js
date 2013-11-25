@@ -23,6 +23,11 @@ util.inherits(Generator, yeoman.generators.Base);
  */
 Generator.prototype.setUpPaths = function setUpPaths() {
 
+    if(!utils.reachFirst(".generator-yui3.json")){
+        this.log.error("You don\'t have a .generator-yui3.json file ! Please provide one by invoking 'yo yui3 --config-file-only' at the root of your project !\n");
+        process.exit(1);
+    }
+
     this.projectRootPath = utils.reachFirst(".generator-yui3.json").pathFolder;
     this.generatorFileConfigPath = utils.reachFirst(".generator-yui3.json").pathFile;
     this.generatorFileConfig = JSON.parse(this.readFileAsString(this.generatorFileConfigPath));

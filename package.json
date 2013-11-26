@@ -1,6 +1,6 @@
 {
     "name": "generator-yui3",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "author": "Charly Poly <cpoly55@gmail.com>",
     "description": "A generator for Yeoman",
     "keywords": [

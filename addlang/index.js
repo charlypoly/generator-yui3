@@ -23,6 +23,8 @@ var Generator = module.exports = function Generator(args, options, config) {
         this.langToAdd = JSON.parse(this.readFileAsString(this.generatorFileConfigPath)).lang;
     }
 
+    console.log(this.langToAdd);
+
 };
 
 util.inherits(Generator, scriptBase);

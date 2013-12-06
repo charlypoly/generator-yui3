@@ -8,7 +8,10 @@ var scriptBase = require('../script-base');
 var Generator = module.exports = function Generator(args, options, config) {
     scriptBase.apply(this, arguments);
     this.setUpPaths();
-    this._isInModule();
+    if(this.context.where !== "module" || this.context.position !== "root"){
+        this.log.error('You are not at the root of your module\n');
+        process.exit(1);
+    }
 };
 
 util.inherits(Generator, scriptBase);

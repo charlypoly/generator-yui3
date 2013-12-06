@@ -1,27 +1,26 @@
 'use strict';
-var util = require('util'),
-yeoman = require('yeoman-generator'),
-path = require("path"),
-fs = require("fs"),
-scriptBase = require('../script-base'),
-utils = require('../utils'),
-exec = require('child_process').exec,
-child;
+var util        = require('util'),
+    yeoman      = require('yeoman-generator'),
+    path        = require("path"),
+    fs          = require("fs"),
+    scriptBase  = require('../script-base'),
+    utils       = require('../utils'),
+    exec        = require('child_process').exec,
+    child;
 
 var Generator = module.exports = function Generator(args, options, config) {
     scriptBase.apply(this, arguments);
     this.setUpPaths();
 
-    // TODO create a this._isInModule() different from this._isAtRootModule()
+    // TODO create a this._isInRootModule() different from this._isAtRootModule()
 };
 
 util.inherits(Generator, scriptBase);
 
 Generator.prototype.createStructure = function createStructure() {
-    var buildFileInfo = utils.reachFirst("build.json");
 
     child = exec('shifter', {
-            cwd: buildFileInfo.pathFolder
+            cwd: this.buildFileInfo.relativeContainer
         },
         function(error, stdout, stderr) {
             console.log('stdout: ' + stdout);

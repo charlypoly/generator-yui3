@@ -9,7 +9,11 @@ var utils = require('../utils');
 var Generator = module.exports = function Generator(args, options, config) {
     scriptBase.apply(this, arguments);
     this.setUpPaths();
-    this._isInModule();
+
+    if(this.context.where !== "module" || this.context.position !== "root"){
+        this.log.error('You are not at the root of your module\n');
+        process.exit(1);
+    }
 
 
 
@@ -24,7 +28,7 @@ var Generator = module.exports = function Generator(args, options, config) {
     //     this.yui3Version = this.packageJson.dependencies.yui;
     // }
 
-    this.yui3Version = this.generatorFileConfig.software_version.yui
+    // this.yui3Version = this.configFileData.software_version.yui
 
 
 };

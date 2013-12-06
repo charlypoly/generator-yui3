@@ -10,7 +10,11 @@ var Generator = module.exports = function Generator(args, options, config) {
 
     scriptBase.apply(this, arguments);
     this.setUpPaths();
-    this._isInModule();
+
+    if(this.context.where !== "module" || this.context.position !== "root"){
+        this.log.error('You are not at the root of your module\n');
+        process.exit(1);
+    }
 
 
     var remain = options.argv.remain,
@@ -40,12 +44,15 @@ Generator.prototype.generator = function generator() {
     this.mkdir("templates");
 
     // create template file ?
-    var name = this.extraName ? this.entityName + "-" + this.extraName : this.entityName
-    var fileFullPath = path.join(this.moduleRootPath, "templates/" + name + ".handlebars.html");
+    var name = this.extraName ? this.moduleName + "-" + this.extraName : this.moduleName
+
+    console.log(this.buildFileInfo);
+
+    var fileFullPath = "templates/" + name + ".handlebars.html"
     if (!fs.existsSync(fileFullPath)) {
         var data = this.engine(   this.readFileAsString(path.join(__dirname, "templates", "_myModule.handlebars.html"))   ,   {
             projectName : this.projectName,
-            moduleName : this.entityName,
+            moduleName : this.moduleName,
             extraName : this.extraName
         });
         this.write( "templates/" + name + ".handlebars.html" , data );
@@ -57,13 +64,13 @@ Generator.prototype.generator = function generator() {
     // update meta
     this._addDepsInMetaFile({
         metaFullPath: this.metaFilePath,
-        moduleName: this.entityName,
+        moduleName: this.moduleName,
         depsTab: ["handlebars-base"]
     });
 
     // update build
-    var buildFile = JSON.parse(this.readFileAsString(this.buildFilePath));
-    this._pushOnce(buildFile.builds[this.entityName].jsfiles, "../templates/" + name + ".js", true);
+    var buildFile = JSON.parse(this.readFileAsString( this.buildFileInfo.relativeNode ));
+    this._pushOnce(buildFile.builds[this.moduleName].jsfiles, "../templates/" + name + ".js", true);
     if (!buildFile.exec) {
         buildFile.exec = [];
     }
@@ -74,7 +81,7 @@ Generator.prototype.generator = function generator() {
     }
     this._pushOnce(buildFile.postexec, "ruby ../../../../../../script/post_shifter_cleaner.rb");
 
-    this.write(this.buildFilePath, JSON.stringify(buildFile, null, 4) );
+    this.write(this.buildFileInfo.relativeNode, JSON.stringify(buildFile, null, 4) );
 
 }
 

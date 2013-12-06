@@ -9,18 +9,23 @@ var Generator = module.exports = function Generator(args, options, config) {
 
     scriptBase.apply(this, arguments);
     this.setUpPaths();
-    this._isInModule();
+    if(this.context.where !== "module" || this.context.position !== "root"){
+        this.log.error('You are not at the root of your module\n');
+        process.exit(1);
+    }
 
 
     var remain = options.argv.remain,
         remainLength = remain.length;
     this.langToAdd = [];
 
+
+
     if (remainLength) {
         this.langToAdd = remain;
     } else {
         // def
-        this.langToAdd = JSON.parse(this.readFileAsString(this.generatorFileConfigPath)).lang;
+        this.langToAdd = JSON.parse(this.readFileAsString(this.configFilePath)).lang;
     }
 
     console.log(this.langToAdd);
@@ -38,26 +43,27 @@ Generator.prototype.actions = function actions() {
 
     // create lang folder if needed
     // ---------------------------------------------------------
-    if (!fs.existsSync(path.join(this.moduleRootPath, "lang"))) {
-        this.mkdir(path.join(this.moduleRootPath, "lang"));
-        metaFile[this.entityName].lang = [];
+    if (!fs.existsSync("lang")) {
+        this.mkdir("lang");
+        metaFile[this.moduleName].lang = [];
     }
 
     // create lang files if needed & update build.json
     // ---------------------------------------------------------
 
-    fileToCreate = path.join(this.moduleRootPath, "/lang/", this.entityName + ".js");
+    fileToCreate = path.join("lang/", this.moduleName + ".js");
     if (!fs.existsSync(fileToCreate)) {
         this.write(fileToCreate, "{}");
     }
 
     for (i = 0; i < langLength; i++) {
         lang = this.langToAdd[i];
-        fileToCreate = path.join(this.moduleRootPath, "/lang/", this.entityName + "_" + lang + ".js");
+        fileToCreate = path.join("lang/", this.moduleName + "_" + lang + ".js");
         if (!fs.existsSync(fileToCreate)) {
             updateMeta = true;
             this.write(fileToCreate, "{}");
-            this._pushOnce( metaFile[this.entityName].lang , lang);
+            console.log(metaFile)
+            this._pushOnce( metaFile[this.moduleName].lang , lang);
         }
     }
 
@@ -71,7 +77,7 @@ Generator.prototype.actions = function actions() {
 
 // private
 // --------------------------------------------------------------------------
-Generator.prototype._isInModule = function _isInModule() {
+Generator.prototype._isInRootModule = function _isInRootModule() {
     if (!fs.existsSync(this.buildFilePath)) {
         this.log.error('Please use this command inside a module !\n');
         process.exit(1);

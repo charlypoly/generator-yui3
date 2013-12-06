@@ -1,6 +1,6 @@
 {
     "name": "generator-yui3",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "author": "Charly Poly <cpoly55@gmail.com>",
     "description": "A generator for Yeoman",
     "keywords": [
@@ -23,7 +23,7 @@
     },
     "dependencies": {
         "yeoman-generator": "~0.13.4",
-        "yui": "3.13.0",
+        "yui": "3.14.0",
         "glob": "3.2.6",
         "yo": "~1.0.4",
         "grunt-cli": "~0.1.9",

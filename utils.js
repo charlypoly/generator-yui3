@@ -1,39 +1,58 @@
-var path = require('path');
-var fs = require('fs');
+var NAME    = "utils",
+    path    = require('path'),
+    fs      = require('fs');
 
-/*
- * @return {
-    folder : xxx,
-    file : xxx
- }
- *
- * look for the first "fileName" in ancestor folder
- * @method reachFirst
- *
- */
+exports.reachFirst = function reachFirst(options) {
 
-exports.reachFirst = function reachFirst(fileName) {
-    var recurs = "";
+    var type = options.type,
+        name = options.name,
+        from = options.from,
+        returnObject, pathFolder, pathFile, recurs;
+
+    //params control
+    if (type && (type !== "folder" && type !== "file")) {
+        throw new Error("Please enter a valid type");
+    }
+
+    if(from){
+        if(!fs.existsSync(from) || !fs.statSync(from).isDirectory()){
+            from = process.cwd();
+        }
+    }else{
+        from = process.cwd();
+    }
+
+    //params control - end
+
+    // console.log(NAME ? NAME : "" ," type : ", type);
+    // console.log(NAME ? NAME : "" ," name : ", name);
+    // console.log(NAME ? NAME : "" ," from : ", from);
+
+    recurs = "";
 
     while (true) {
 
-        var pathFolder = path.join(process.cwd(), recurs);
-        var pathFile = path.join(pathFolder, fileName);
+        pathFolder = path.join(from, recurs);
+        pathFile = path.join(pathFolder,name);
+
+        // console.log("in ", pathFolder);
+        // console.log("look for ", pathFile);
 
         if (fs.existsSync(pathFile)) {
-            var returnObject = {
-                pathFolder: pathFolder,
-                pathFile: pathFile
+            returnObject = {
+                relativeNode : recurs + name,
+                relativeContainer : recurs,
+                absContainer: pathFolder,
+                absNode: pathFile
             };
             // console.log("returnObject : ", returnObject);
             return returnObject;
         }
         //change path
         recurs = recurs + "../";
-        if(pathFolder === "/"){
-            console.log(fileName + " not found");
+        if (pathFolder === "/") {
+            // console.log(name + " not found");
             return;
         }
     }
-
 }

@@ -5,11 +5,12 @@
 
 
 'use strict';
-var path = require('path');
-var util = require('util');
-var yeoman = require('yeoman-generator');
-var fs = require('fs');
-var utils = require('./utils');
+var NAME    = "script-base",
+    path    = require('path'),
+    util    = require('util'),
+    yeoman  = require('yeoman-generator'),
+    fs      = require('fs'),
+    utils   = require('./utils');
 
 var Generator = module.exports = function Generator() {
     yeoman.generators.Base.apply(this, arguments);
@@ -23,25 +24,28 @@ util.inherits(Generator, yeoman.generators.Base);
  */
 Generator.prototype.setUpPaths = function setUpPaths() {
 
-    if(!utils.reachFirst(".generator-yui3.json")){
+    if(!utils.reachFirst({type : "file", name : ".generator-yui3.json"})){
         this.log.error("You don\'t have a .generator-yui3.json file ! Please provide one by invoking 'yo yui3 --config-file-only' at the root of your project !\n");
         process.exit(1);
     }
 
-    this.projectRootPath = utils.reachFirst(".generator-yui3.json").pathFolder;
-    this.generatorFileConfigPath = utils.reachFirst(".generator-yui3.json").pathFile;
-    this.generatorFileConfig = JSON.parse(this.readFileAsString(this.generatorFileConfigPath));
+    // severals info about .generator-yui3.json
+    this.configFileInfo = utils.reachFirst({type : "file", name : ".generator-yui3.json"});
+
+    // absolute path to the root folder of the project
+    this.projectRootPath = this.configFileInfo.absContainer;
+    // absolute path to the config file of the project
+    this.configFilePath = this.configFileInfo.absNode;
+
+    this.configFileData = JSON.parse(this.readFileAsString(this.configFilePath));
     // is source modules and build modules have same name ?
-    this.prefixedModuleName = this.generatorFileConfigPath["prefixed-modules"];
+    this.prefixedModuleName = this.configFilePath["prefixed-modules"];
 
     // console.log(this.prefixedModuleName);
 
     // where we lunch yo
     this.currentPath = process.cwd();
-    // as we are in a module we set the projectName
-
-
-    this.projectName = this.generatorFileConfig.projectName;
+    this.projectName = this.entityName = this.configFileData.projectName;
 
     // --------------------------------------------------
     // generator part
@@ -51,6 +55,19 @@ Generator.prototype.setUpPaths = function setUpPaths() {
     // --------------------------------------------------
     // target part
     // --------------------------------------------------
+
+    this.context = this.whereAmI();
+
+    if(this.context.where === "module"){
+        this.buildFileInfo = utils.reachFirst({type : "file", name : "build.json"});
+        this.moduleName = this.context.name;
+        this.metaFilePath = path.join( this.buildFileInfo.relativeContainer, "meta" , this.moduleName + ".json" );
+    } else if(this.context.where === "project"){
+
+    }
+
+/*
+
 
     // set entity context. could be "project" or "module"
     // if it is project we have the .generator-yui3.json
@@ -70,7 +87,9 @@ Generator.prototype.setUpPaths = function setUpPaths() {
         this.buildFilePath = path.join(this.currentPath, './build.json');
         var buildFile = JSON.parse(this.readFileAsString(this.buildFilePath));
         // console.log(buildFile);
-        this.entityName = this.moduleName = buildFile.name;
+        if(buildFile.name){
+            this.entityName = this.moduleName = buildFile.name;
+        }
 
         // meta file path
         this.metaFilePath = path.join(this.currentPath, 'meta/' + this.entityName + '.json');
@@ -81,14 +100,108 @@ Generator.prototype.setUpPaths = function setUpPaths() {
 
     }
 
+
+
+*/
+
+
 }
 
-Generator.prototype._isInModule = function _isInModule() {
-    if (this.entityContext !== "module") {
-        this.log.error('Please use this command inside a module !\n');
+
+
+Generator.prototype.whereAmI = function whereAmI() {
+    // console.log(NAME ? NAME : "" , " : whereAmI");
+
+    var returnObject = {
+        where: "",
+        position: "",
+        name: "",
+        positionFromRoot : ""
+    };
+
+    var configFileInfo = utils.reachFirst({
+        type: "file",
+        name: ".generator-yui3.json"
+    });
+    var buildFileInfo = utils.reachFirst({
+        type: "file",
+        name: "build.json"
+    });
+    var srcFolderInfo = utils.reachFirst({
+        type: "folder",
+        name: "src"
+    });
+
+    var currentPath = process.cwd();
+
+    if (configFileInfo) {
+        // in a project
+        var projectName = JSON.parse(this.readFileAsString(configFileInfo.absNode)).projectName;
+        if (configFileInfo.relativeContainer === "") {
+            // root of the project
+            returnObject.where = "project";
+            returnObject.position = "root";
+            returnObject.name = projectName;
+        } else {
+            // in the project but not root
+            if (buildFileInfo) {
+                // in a module
+                var moduleName = JSON.parse(this.readFileAsString(buildFileInfo.relativeNode)).name;
+                if (buildFileInfo.relativeContainer === "") {
+                    // in a root module
+                    returnObject.where = "module";
+                    returnObject.position = "root";
+                    returnObject.name = moduleName;
+                } else {
+                    // not in the root of the module
+                    returnObject.where = "module";
+                    returnObject.position = path.basename(currentPath);
+                    returnObject.name = moduleName;
+                }
+            } else {
+                // we are not in a module
+                if (configFileInfo.relativeContainer === "../" && path.basename(currentPath) === "src") {
+                    //src
+                    returnObject.where = "project";
+                    returnObject.position = "src";
+                    returnObject.name = projectName;
+                } else {
+
+                    var dirName, ourPath = currentPath, relativePathTab = [];
+
+                    while(path.basename(ourPath) !== projectName){
+                        relativePathTab.unshift(path.basename(ourPath));
+                        ourPath = path.dirname(ourPath);
+                    }
+
+                    // somewhere else in a project
+                    returnObject.where = "project";
+                    returnObject.name = projectName;
+                    returnObject.positionFromRoot = relativePathTab.join("/")
+
+                    // this.log.error('This generator will not help you where you are\n');
+                }
+
+            }
+        }
+    } else {
+        // not in a project
+        this.log.error('You are not in a YUI3 project\n');
         process.exit(1);
     }
-};
+
+
+
+    // console.log(NAME ? NAME : "" ," configFileInfo : ", configFileInfo);
+    // console.log("------------------------------------------------------");
+    // console.log(NAME ? NAME : "" ," buildFileInfo : ", buildFileInfo);
+    // console.log("------------------------------------------------------");
+    // console.log(NAME ? NAME : "" ," srcFolderInfo : ", srcFolderInfo);
+
+    // console.log(NAME ? NAME : "" ," returnObject : ", returnObject);
+
+    return returnObject;
+}
 
 /**
  * Only push once a string element

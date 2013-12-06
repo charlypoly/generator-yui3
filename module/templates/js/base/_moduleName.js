@@ -1,5 +1,5 @@
 /**
-* 
+*
 * @module <%= name %>
 */
 
@@ -26,10 +26,5 @@ var <%= _.capitalize(_.camelize(name)) %> = Y.Base.create("<%= name %>", Y.Base,
    // ATTRS : {}
 });
 
-<%
-var namespacing = 'Y.';
-if (namespace) {
-   namespacing = namespacing + 'namespace(\'' + _.capitalize(_.camelize(namespace)) + '\').';
-}
-%>
-<%= namespacing + _.capitalize(_.camelize(name)) %> = <%= _.capitalize(_.camelize(name)) %>;
+
+<%= "Y." + _.capitalize(_.camelize(name)) %> = <%= _.capitalize(_.camelize(name)) %>;

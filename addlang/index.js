@@ -19,16 +19,12 @@ var Generator = module.exports = function Generator(args, options, config) {
         remainLength = remain.length;
     this.langToAdd = [];
 
-
-
     if (remainLength) {
         this.langToAdd = remain;
     } else {
         // def
         this.langToAdd = JSON.parse(this.readFileAsString(this.configFilePath)).lang;
     }
-
-    console.log(this.langToAdd);
 
 };
 
@@ -62,7 +58,6 @@ Generator.prototype.actions = function actions() {
         if (!fs.existsSync(fileToCreate)) {
             updateMeta = true;
             this.write(fileToCreate, "{}");
-            console.log(metaFile)
             this._pushOnce( metaFile[this.moduleName].lang , lang);
         }
     }

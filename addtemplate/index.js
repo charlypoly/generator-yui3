@@ -25,9 +25,9 @@ var Generator = module.exports = function Generator(args, options, config) {
         this.extraName = remain[0];
     }
 
-    if (this.extraName) {
-        console.log("extra name : " + this.extraName);
-    }
+    // if (this.extraName) {
+    //     console.log("extra name : " + this.extraName);
+    // }
 
 };
 
@@ -45,8 +45,6 @@ Generator.prototype.generator = function generator() {
 
     // create template file ?
     var name = this.extraName ? this.moduleName + "-" + this.extraName : this.moduleName
-
-    console.log(this.buildFileInfo);
 
     var fileFullPath = "templates/" + name + ".handlebars.html"
     if (!fs.existsSync(fileFullPath)) {

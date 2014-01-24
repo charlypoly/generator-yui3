@@ -12,13 +12,17 @@ var Generator = module.exports = function Generator(args, options, config) {
     scriptBase.apply(this, arguments);
     this.setUpPaths();
 
+     if(this.context.where !== "module"){
+        this.log.error('You are not in a module\n');
+        process.exit(1);
+    }
+
     // TODO create a this._isInRootModule() different from this._isAtRootModule()
 };
 
 util.inherits(Generator, scriptBase);
 
-Generator.prototype.createStructure = function createStructure() {
-
+Generator.prototype.build = function build() {
     child = exec('shifter', {
             cwd: this.buildFileInfo.relativeContainer
         },

@@ -16,18 +16,19 @@ var Generator = module.exports = function Generator(args, options, config) {
         process.exit(1);
     }
 
+if(options && options.argv){
+    var remain = options.argv.remain;
+    var remainLength = remain.length;
+}
 
-    var remain = options.argv.remain,
-        remainLength = remain.length;
+
+
 
     // extra name for file template
     if (remainLength) {
         this.extraName = remain[0];
     }
 
-    // if (this.extraName) {
-    //     console.log("extra name : " + this.extraName);
-    // }
 
 };
 

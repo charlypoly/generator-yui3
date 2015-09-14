@@ -41,11 +41,17 @@ Generator.prototype.actions = function actions() {
     // ---------------------------------------------------------
     if (!fs.existsSync("lang")) {
         this.mkdir("lang");
+    }
+
+    if(!metaFile[this.moduleName].lang){
         metaFile[this.moduleName].lang = [];
     }
 
+
+
     // create lang files if needed & update build.json
     // ---------------------------------------------------------
+
 
     fileToCreate = path.join("lang/", this.moduleName + ".js");
     if (!fs.existsSync(fileToCreate)) {
@@ -58,6 +64,10 @@ Generator.prototype.actions = function actions() {
         if (!fs.existsSync(fileToCreate)) {
             updateMeta = true;
             this.write(fileToCreate, "{}");
+
+
+            console.log(metaFile[this.moduleName]);
+
             this._pushOnce( metaFile[this.moduleName].lang , lang);
         }
     }

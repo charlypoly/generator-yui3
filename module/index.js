@@ -13,10 +13,10 @@ var Generator = module.exports = function Generator(args, options, config) {
     scriptBase.apply(this, arguments);
     this.setUpPaths();
 
-    if(this.context.where !== "project" || this.context.position !== "src" ){
-        this.log.error('You are not in the src folder\n');
-        process.exit(1);
-    }
+    //if(this.context.where !== "project" || this.context.position !== "src" ){
+    //    this.log.error('You are not in the src folder\n');
+    //    process.exit(1);
+    //}
 
     this.name = this.args[0];
 
